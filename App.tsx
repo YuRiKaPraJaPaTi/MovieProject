@@ -8,13 +8,16 @@
 
 import { StyleSheet, View } from 'react-native';
 import WelcomeScreen from './src/Auth/WelcomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthStack from './src/navigation/AuthStack';
 
 function App() {
 
   return (
-    <View style={styles.container}>
-      <WelcomeScreen />
-    </View>
+     <NavigationContainer>
+      <AuthStack />
+    </NavigationContainer>
+    
   );
 }
 

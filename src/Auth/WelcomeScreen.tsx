@@ -1,7 +1,11 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../navigation/types';
 
-const WelcomeScreen = () => {
+type Props = NativeStackScreenProps<AuthStackParamList, 'Welcome'>;
+
+const WelcomeScreen = ({navigation}:Props) => {
   return (
     <View style={styles.container}>
             <Image 
@@ -17,7 +21,7 @@ const WelcomeScreen = () => {
                   <Text style={styles.text}>"Track films you've watched. Save these you want to see."</Text>
             </View>
 
-            <TouchableOpacity style={styles.getStarted}>
+            <TouchableOpacity style={styles.getStarted} onPress={() => navigation.navigate('Login')} >
                   <Text style={styles.buttonText}>Get Started</Text>
             </TouchableOpacity>
       
