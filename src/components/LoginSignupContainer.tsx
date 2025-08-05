@@ -16,6 +16,7 @@ interface FormProps {
             password?: string;
             username?: string;
       };
+      loading: boolean;
 }
 
 export interface FormValues {
@@ -25,7 +26,7 @@ export interface FormValues {
   
 }
 
-const LoginSignupContainer = ({title, buttonLabel,onToggleForm,onSubmit, externalErrors}:FormProps) => {
+const LoginSignupContainer = ({title, buttonLabel,onToggleForm,onSubmit, externalErrors, loading}:FormProps) => {
       const [form, setForm] = useState<FormValues>({email:'', password:'',username:''})
       const [emailValid, setEmailValid] = useState(true)
       const [passwordValid, setPasswordValid] = useState(true);
@@ -125,7 +126,7 @@ const LoginSignupContainer = ({title, buttonLabel,onToggleForm,onSubmit, externa
 
                   
 
-                  <MyButton label={buttonLabel} onPress={handleSubmit} />
+                  <MyButton label={buttonLabel} onPress={handleSubmit} loading={loading}/>
                   
                   <View style={styles.foot}>
                         <Text style={styles.normalText}>

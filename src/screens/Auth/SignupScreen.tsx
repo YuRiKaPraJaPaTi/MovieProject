@@ -64,6 +64,7 @@ const SignupScreen = ({navigation}: Props) => {
                   onSubmit={handleSignup}
                   onToggleForm={()=>navigation.navigate('Login')}
                   externalErrors={fieldErrors}
+                  loading={loading}
             />
 
       </ImageBackground>
