@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import InputBox from './InputBox'
 import MyButton from './MyButton'
 import GoogleButton from './GoogleButton'
@@ -8,8 +8,15 @@ interface FormProps {
       title: string,
       buttonLabel: string,
       showUserNameField?: boolean,
-      onPressButton: () => void;
+      onPressButton?: () => void;
       onToggleForm: () => void;
+      onSubmit: (form: FormValues) => void;
+        externalErrors?: {
+            email?: string;
+            password?: string;
+            username?: string;
+      };
+      loading: boolean;
 }
 
 export interface FormValues {
@@ -19,7 +26,63 @@ export interface FormValues {
   
 }
 
-const LoginSignupContainer = ({title, buttonLabel,onPressButton,onToggleForm}:FormProps) => {
+const LoginSignupContainer = ({title, buttonLabel,onToggleForm,onSubmit, externalErrors, loading}:FormProps) => {
+      const [form, setForm] = useState<FormValues>({email:'', password:'',username:''})
+      const [emailValid, setEmailValid] = useState(true)
+      const [passwordValid, setPasswordValid] = useState(true);
+      const [emailError, setEmailError] = useState<string | null>(null);
+      const [passwordError, setPasswordError] = useState<string | null>(null); 
+
+      // Handle email validation
+      const handleEmailChange = (email: string) => {
+            setForm({ ...form, email });
+
+            if (externalErrors?.email) externalErrors.email = undefined;
+            
+            if (!email) {
+                  setEmailError(null);
+                  setEmailValid(true);
+            } else {
+                  // Validate the email format
+                  const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailFormat.test(email)) {
+                        setEmailValid(false);
+                        setEmailError('Please enter a valid email address.');
+                        } else {
+                        setEmailValid(true);
+                        setEmailError(null);
+                  }
+            }
+      };
+
+      // Handle password validation
+      const handlePasswordChange = (password: string) => {
+            setForm({ ...form, password });
+
+            if (externalErrors?.password) externalErrors.password = undefined;
+
+            if (!password) {
+                  setPasswordError(null);
+                  setPasswordValid(true);
+            } else {
+                  // Validate the password length
+                  if (password.length < 6) {
+                        setPasswordValid(false);
+                        setPasswordError('Password must be at least 6 characters.');
+                  } else {
+                        setPasswordValid(true);
+                        setPasswordError(null);
+                  }
+            }
+      };
+
+      // Handle form submission
+      const handleSubmit = () => {
+            if (emailValid && passwordValid) {
+                  onSubmit(form);
+            }
+      };
+      
   return (
       <View style={styles.signupContainer}>
 
@@ -31,14 +94,39 @@ const LoginSignupContainer = ({title, buttonLabel,onPressButton,onToggleForm}:Fo
 
                   
                   {title === 'SignUp' && (
-                  <InputBox iconName={require('../assets/Username.png')} placeholder='Username' />
+                  <InputBox 
+                        iconName={require('../assets/Username.png')} placeholder='Username' 
+                        value={form.username!}
+                        onChangeText={(text) => setForm({ ...form, username: text })}
+                        style={[externalErrors?.username && styles.errorBorder]}
+                  />
                   )}
-                  <InputBox iconName={require('../assets/Email.png')} placeholder='Email'/>
-                  <InputBox iconName={require('../assets/Password.png')} placeholder='Password'/>
+
+                  <InputBox 
+                        iconName={require('../assets/Email.png')} 
+                        placeholder='Email'
+                        value={form.email}
+                        onChangeText={handleEmailChange}
+                        style={[(!emailValid || externalErrors?.email) && styles.errorBorder]}
+                  />
+                  {(!emailValid || externalErrors?.email) && (
+                        <Text style={styles.errorText}>{externalErrors?.email || emailError}</Text>
+                  )}
+
+                  <InputBox 
+                        iconName={require('../assets/Password.png')} 
+                        placeholder='Password'
+                        value={form.password}
+                        onChangeText={handlePasswordChange}
+                        style={[(!passwordValid || externalErrors?.password) && styles.errorBorder]}
+                  />
+                  {(!passwordValid || externalErrors?.password) && (
+                        <Text style={styles.errorText}>{externalErrors?.password || passwordError}</Text>
+                  )}
 
                   
 
-                  <MyButton label={buttonLabel} onPress={onPressButton} />
+                  <MyButton label={buttonLabel} onPress={handleSubmit} loading={loading}/>
                   
                   <View style={styles.foot}>
                         <Text style={styles.normalText}>
@@ -101,4 +189,14 @@ const styles = StyleSheet.create({
             color: '#FFCA45', 
             fontWeight: 600,
       },
+        errorBorder: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 10,
+    marginLeft: 10,
+  },
+ 
 })
