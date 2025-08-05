@@ -1,5 +1,5 @@
 import { Alert, ImageBackground, StyleSheet} from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation/types';
 import { Image } from 'react-native/';
@@ -12,7 +12,7 @@ const SignupScreen = ({navigation}: Props) => {
       const [loading, setLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string; username?: string }>({});
 
-  const handleSignup = (form: FormValues) => {
+  const handleSignup = useCallback((form: FormValues) => {
     const { email, password, username } = form;
 
     const errors: typeof fieldErrors = {};
@@ -51,7 +51,7 @@ const SignupScreen = ({navigation}: Props) => {
     .finally(() => {
       setLoading(false);
     });
-  };
+  },[navigation]);
 
   return (
     <ImageBackground source={require('../../assets/SignupBg.jpg')} resizeMode='cover' style={{flex:1, padding: 20}}>

@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useCallback } from 'react'
 import auth, { getAuth, signOut } from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -8,7 +8,7 @@ const ProfileScreen = () => {
       const email = user?.email ?? 'No Email';
       const initial = email.charAt(0).toUpperCase();
 
-      const handleSignOut = async () => {
+      const handleSignOut = useCallback(async () => {
             const auth = getAuth();
             try {
                   await signOut(auth);
@@ -18,7 +18,7 @@ const ProfileScreen = () => {
                   Alert.alert("Error", "Something went wrong while signing out.");
                   console.error("Sign-out error:", error);
             }
-      };
+      }, []);
       return (
       
             <TouchableOpacity style={styles.logout} onPress={handleSignOut}>

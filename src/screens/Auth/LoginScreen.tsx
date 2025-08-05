@@ -1,5 +1,5 @@
 import { Alert, Image, ImageBackground, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { AuthStackParamList } from '../../navigation/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import LoginSignupContainer, { FormValues } from '../../components/LoginSignupContainer';
@@ -9,14 +9,17 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Login'> & {
       onLogin: () => void;
 };
 
+type FieldErrors = { email?: string; password?: string };
+
+
 const LoginScreen = ({navigation, onLogin}:Props) => {
       const [loading, setLoading] = useState(false);
-      const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
+      const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
-      const handleLogin = (form: FormValues) => {
+      const handleLogin = useCallback((form: FormValues) => {
             const { email, password } = form;
 
-            const errors: typeof fieldErrors = {};
+            const errors: FieldErrors = {};
 
             if (!email) errors.email = 'Email is required';
             if (!password) errors.password = 'Password is required';
@@ -63,8 +66,8 @@ const LoginScreen = ({navigation, onLogin}:Props) => {
                   .finally(() => {
                   setLoading(false);
                   });
-      }
-      ;
+      },[onLogin]);
+      
   return (
    
       <ImageBackground source={require('../../assets/LoginBg.jpg')} resizeMode='cover' style={{flex:1, padding: 20}}>
