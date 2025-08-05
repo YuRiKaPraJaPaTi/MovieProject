@@ -6,10 +6,12 @@ interface props {
       iconName?: any;
       placeholder: string;
       style?: object;
-      //   hasError?: boolean;
+      value?: string;
+      onChangeText?: (text:string)=>void;
+      hasError?: boolean;
 }
 
-const InputBox = ({iconName, placeholder, style}:props) => {
+const InputBox = ({iconName, placeholder, style, value, onChangeText, hasError}:props) => {
       return (
             <View style={[styles.inputContainer, style]}>
                   <Image source ={iconName}  style={styles.icon} />
@@ -17,6 +19,8 @@ const InputBox = ({iconName, placeholder, style}:props) => {
             <TextInput  style={[styles.input]}
                   placeholder={placeholder}
                   placeholderTextColor="#FFFFFF80"
+                  value={value}
+                  onChangeText={onChangeText}
             />      
             
       </View>

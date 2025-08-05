@@ -1,12 +1,8 @@
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { AuthStackParamList } from '../../navigation/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import MyButton from '../../components/MyButton';
-import InputBox from '../../components/InputBox';
-import { BlurView } from '@react-native-community/blur';
-import GoogleButton from '../../components/GoogleButton';
-import LoginSignupContainer from '../../components/LoginSignupContainer';
+import LoginSignupContainer, { FormValues } from '../../components/LoginSignupContainer';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
@@ -20,7 +16,7 @@ const LoginScreen = ({navigation}:Props) => {
             <LoginSignupContainer 
                   title='LogIn' 
                   buttonLabel='LogIn' 
-                  onPressButton={()=>navigation.navigate('Signup')} 
+                  onSubmit={()=>navigation.navigate('Signup')} 
                   onToggleForm={()=>navigation.navigate('Signup')}
             />
 
