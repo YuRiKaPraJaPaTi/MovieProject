@@ -20,7 +20,7 @@ export default MyButton
 
 const styles = StyleSheet.create({
       button: {
-            height: 50,
+            height: 40,
             width: '100%',
             backgroundColor: '#FFCA45',
             justifyContent: 'center',

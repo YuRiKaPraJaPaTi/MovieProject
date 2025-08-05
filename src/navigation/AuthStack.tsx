@@ -13,7 +13,7 @@ const AuthStack = () => {
     <Auth.Navigator>
       <Auth.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
       <Auth.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
-      <Auth.Screen name="Signup" component={SignupScreen} options={{headerShown: true}}/>
+      <Auth.Screen name="Signup" component={SignupScreen} options={{headerShown: false}}/>
     </Auth.Navigator>
   )
 }
