@@ -8,11 +8,20 @@ import { AuthStackParamList } from './types';
 
 const Auth = createNativeStackNavigator<AuthStackParamList>();
 
-const AuthStack = () => {
+type Props = {
+  onLogin: ()=>void;
+}
+
+const AuthStack = ({onLogin}:Props) => {
   return (
     <Auth.Navigator>
+
       <Auth.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
-      <Auth.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+
+      <Auth.Screen name="Login" options={{headerShown: false}}>
+            {props => <LoginScreen {...props} onLogin={onLogin} />}
+      </Auth.Screen>
+
       <Auth.Screen name="Signup" component={SignupScreen} options={{headerShown: false}}/>
     </Auth.Navigator>
   )

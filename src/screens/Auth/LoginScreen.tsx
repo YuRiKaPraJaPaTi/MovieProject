@@ -5,9 +5,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import LoginSignupContainer, { FormValues } from '../../components/LoginSignupContainer';
 import auth from '@react-native-firebase/auth';
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'> & {
+      onLogin: () => void;
+};
 
-const LoginScreen = ({navigation}:Props) => {
+const LoginScreen = ({navigation, onLogin}:Props) => {
       const [loading, setLoading] = useState(false);
       const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
@@ -30,8 +32,8 @@ const LoginScreen = ({navigation}:Props) => {
             auth()
                   .signInWithEmailAndPassword(email, password)
                   .then(() => {
-                  // onLogin();
-                  navigation.navigate('Signup')
+                  onLogin();
+                  // navigation.navigate('Signup')
                   })
                   .catch((error) => {
                   // Handle Firebase authentication errors
