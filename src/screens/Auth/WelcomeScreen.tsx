@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../navigation/types';
+import { AuthStackParamList } from '../../navigation/types';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Welcome'>;
 
@@ -9,11 +9,11 @@ const WelcomeScreen = ({navigation}:Props) => {
   return (
     <View style={styles.container}>
             <Image 
-                  source={require('../assets/Banner.png')}
+                  source={require('../../assets/Banner.png')}
                   style={styles.banner}
             />
             <Image 
-                  source={require('../assets/LOGO.png')}
+                  source={require('../../assets/LOGO.png')}
                   style={styles.logo}
             />
 

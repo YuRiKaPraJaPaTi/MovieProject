@@ -7,7 +7,7 @@
 
 
 import { StyleSheet, View } from 'react-native';
-import WelcomeScreen from './src/Auth/WelcomeScreen';
+import WelcomeScreen from './src/screens/Auth/WelcomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './src/navigation/AuthStack';
 
