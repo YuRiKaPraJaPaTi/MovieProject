@@ -10,12 +10,14 @@ import { StyleSheet, View } from 'react-native';
 import WelcomeScreen from './src/screens/Auth/WelcomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './src/navigation/AuthStack';
+import BottomTabNavigator from './src/navigation/BottomTabNavigator';
 
 function App() {
 
   return (
      <NavigationContainer>
-      <AuthStack />
+      {/* <AuthStack /> */}
+      <BottomTabNavigator/>
     </NavigationContainer>
     
   );

@@ -5,3 +5,10 @@ export type AuthStackParamList = {
   Login: undefined;
   Signup: undefined;
 };
+
+export type BottomTabParamList = {
+  Home: undefined;
+  Search: undefined;
+  Wishlist: undefined;
+  Profile: undefined;
+}
