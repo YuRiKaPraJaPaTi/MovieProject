@@ -24,11 +24,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFCA45',
-    padding: 12,
     borderRadius: 16,
     justifyContent: 'center',
     width: '100%',
-    height: 50,
+    height: 40,
   },
   icon: {
     marginRight: 10,
