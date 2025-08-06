@@ -6,13 +6,14 @@ interface MovieCardProps {
       title: string;
       rating?: number;
       releaseDate?: string;
-      section: 'New Releases' | 'Upcoming' | 'Ranked'
+      section: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular'
 }
 
 const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProps) => {
+  console.log("image is:", image)
       return (
       <View style={styles.card}>
-            <Image source={image} style={styles.image} />
+            <Image source={{uri: image}} style={styles.image} />
             
             <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
 
@@ -20,7 +21,7 @@ const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProp
                   <Text style={styles.metaText}>📅 {releaseDate}</Text>
             )}
 
-            {section === 'Ranked' && rating !== undefined && (
+            {section === 'Top Rated' && rating !== undefined && (
                   <Text style={styles.metaText}>⭐ {rating}</Text>
             )}
             
