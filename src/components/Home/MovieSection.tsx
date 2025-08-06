@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import MovieCard from './MovieCard';
+import { fetchMovies } from '../../TMDBapi/TMDB';
 
 interface MovieItem {
   id: string;
@@ -12,13 +13,49 @@ interface MovieItem {
 
 interface Props {
   title: string;
-  data: MovieItem[];
+  category: string;
 }
 
-const MovieSection = ({ title, data }: Props) => {
-  let sectionType: 'New Releases' | 'Upcoming' | 'Ranked' = 'New Releases';
+const MovieSection = ({ title, category }: Props) => {
+  let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' = 'Now Playing';
   if (title === 'Upcoming') sectionType = 'Upcoming';
-  if (title === 'Ranked') sectionType = 'Ranked';
+  if (title === 'Top Rated') sectionType = 'Top Rated';
+
+  const [data, setData] = useState<MovieItem[]>([]);
+   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   const getMovies = async () => {
+  //     const movies = await fetchMovies(category);
+  //     setData(movies);
+  //   };
+  //   getMovies();
+  // }, [category]);
+
+  useEffect(() => {
+    const getMovies = async () => {
+      setLoading(true);
+      setError(null); // Reset error state on new request
+
+      try {
+        // Fetch the movies for the given category
+        const movies = await fetchMovies(category);
+
+        // After getting the movies, update the state
+        setData(movies);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+        setError("Failed to load movies");
+        setData([]);
+      }
+
+      setLoading(false);
+    };
+
+    getMovies();
+  }, [category]);
+
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>

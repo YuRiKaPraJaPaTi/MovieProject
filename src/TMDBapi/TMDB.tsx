@@ -3,7 +3,7 @@ const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: `Bearer ${process.env.API_TOKEN}`
+    Authorization: `Bearer ${process.env.TMDB_API_KEY}`
   }
 };
 
@@ -12,31 +12,41 @@ const options = {
 //   .then(res => console.log(res))
 //   .catch(err => console.error(err));
 
-const NOW_PLAYING_API_URL = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`;
+// const NOW_PLAYING_API_URL = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`;
+const POPULAR_API_URL = `https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`;
+// const TOP_RATED_API_URL = `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1`;
+// const UPCOMONG_API_URL = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1`;
 
-export const fetchNowPlayingMovies = async () => {
-      
-  try {
-    const response = await fetch(NOW_PLAYING_API_URL, options);
-    const data = await response.json();
+const BASE_URL = 'https://api.themoviedb.org/3/movie';
+const LANGUAGE_PAGE_PARAMS = '?language=en-US&page=1';
 
-       if (!data.results) {
-      console.warn('No results found in response');
-      return [];
-    }
 
-    return data.results.map((movie: any) => ({
-      id: movie.id.toString(),
-      title: movie.title,
-      image: `https://image.tmdb.org/t/p/w780${movie.poster_path}`,
-      releaseDate: movie.release_date,
-      rating: movie.vote_average,
-    }));
+
+export const fetchMovies = async (category:string) => {
+      const URL = `${BASE_URL}/${category}${LANGUAGE_PAGE_PARAMS}`
+      console.log("url:",URL)
+      try {
+            const response = await fetch(POPULAR_API_URL, options);
+            
+            const data = await response.json();
+            console.log("data",data)
+            if (!data.results) {
+            console.warn('No results found in response');
+            return [];
+      }
+
+      return data.results.map((movie: any) => ({
+            id: movie.id.toString(),
+            title: movie.title,
+            image: `https://image.tmdb.org/t/p/w780${movie.poster_path}`,
+            releaseDate: movie.release_date,
+            rating: movie.vote_average,
+      }));
 
     
-  } catch (error) {
-    console.error('Error fetching now playing movies:', error);
-    return [] ;
-   
-  }
+      } catch (error) {
+            console.error('Error fetching now playing movies:', error);
+            return [] ;
+      
+      }
 };

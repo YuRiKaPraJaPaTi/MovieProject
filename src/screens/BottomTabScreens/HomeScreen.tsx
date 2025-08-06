@@ -2,7 +2,7 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HomeHeader from '../../components/Home/HomeHeader'
 import MovieSection from '../../components/Home/MovieSection';
-import { fetchNowPlayingMovies } from '../../TMDBapi/TMDB';
+import { fetchMovies } from '../../TMDBapi/TMDB';
 
 export const dummyMovieData = {
   // newReleases: [
@@ -24,22 +24,16 @@ export const dummyMovieData = {
 
 
 const HomeScreen = () => {
-  const [nowPlaying, setNowPlaying] = useState([]);
 
-  useEffect(() => {
-    const getData = async () => {
-      const fetchedMovies = await fetchNowPlayingMovies();
-      setNowPlaying(fetchedMovies); // Update state with fetched data
-      // You can use a similar method to fetch upcoming and ranked sections if needed
-    };
-
-    getData();
-  }, []);
   return (
     <View style={{flex:1, backgroundColor:"#002335",padding:20}}>
       <HomeHeader />
       <ScrollView>
-        <MovieSection title="Now Playing" data={nowPlaying} />
+        <MovieSection title="Now Playing" category='now_playing'/>
+        <MovieSection title="Upcoming" category="upcoming" />
+        <MovieSection title="Top Rated" category="top_rated" />
+        <MovieSection title="Popular" category="popular" />
+
         {/* <MovieSection title="Upcoming" data={dummyMovieData.upcoming} />
         <MovieSection title="Ranked" data={dummyMovieData.ranked} /> */}
       </ScrollView>
