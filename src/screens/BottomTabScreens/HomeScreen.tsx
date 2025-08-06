@@ -27,8 +27,12 @@ const HomeScreen = () => {
 
   return (
     <View style={{flex:1, backgroundColor:"#002335",padding:20}}>
-      <HomeHeader />
+      <Image source={require('../../assets/LOGOcinephiler.png')} />
+      
       <ScrollView>
+
+        <HomeHeader />
+
         <MovieSection title="Now Playing" category='now_playing'/>
         <MovieSection title="Upcoming" category="upcoming" />
         <MovieSection title="Top Rated" category="top_rated" />

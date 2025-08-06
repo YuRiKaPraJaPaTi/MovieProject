@@ -2,14 +2,14 @@ import axios from 'axios';
 
 const BASE_URL = 'https://api.themoviedb.org/3/movie';
 
-export const fetchMovies = async (category:string) => {
+export const fetchMovies = async (category:string, page: number=1) => {
 
       const options = {
             method: 'GET',
             url: `${BASE_URL}/${category}`,
             params: {
                   language: 'en-US',
-                  page: 1,
+                  page: page.toString(),
             },
             headers: {
                   accept: 'application/json',

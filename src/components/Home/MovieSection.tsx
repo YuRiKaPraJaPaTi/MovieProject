@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import MovieCard from './MovieCard';
 import { fetchMovies } from '../../TMDBapi/TMDB';
+import Pagination from './Pagination';
 
 interface MovieItem {
   id: string;
@@ -22,6 +23,7 @@ const MovieSection = ({ title, category }: Props) => {
   if (title === 'Top Rated') sectionType = 'Top Rated';
 
   const [data, setData] = useState<MovieItem[]>([]);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +34,7 @@ const MovieSection = ({ title, category }: Props) => {
 
       try {
         // Fetch the movies for the given category
-        const movies = await fetchMovies(category);
+        const movies = await fetchMovies(category, page);
 
         // After getting the movies, update the state
         setData(movies);
@@ -46,13 +48,16 @@ const MovieSection = ({ title, category }: Props) => {
     };
 
     getMovies();
-  }, [category]);
+  }, [category, page]);
 
   return (
     <View style={styles.section}>
 
+      <View style={styles.top}>
         <Text style={styles.sectionTitle}>{title}</Text>
-        
+        <Pagination page={page} setPage={setPage}/>
+      </View>
+
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -78,6 +83,13 @@ export default MovieSection;
 const styles = StyleSheet.create({
   section: {
     marginBottom: 24,
+  },
+  top: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 10,
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 24,

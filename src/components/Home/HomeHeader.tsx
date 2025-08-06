@@ -3,13 +3,12 @@ import React from 'react'
 
 const HomeHeader = () => {
   return (
-    <View style={styles.headerContainer}>
-        <Image source={require('../../assets/LOGOcinephiler.png')} />
-                  <View style={styles.welcomeContainer}>
-                        <Text style={styles.welcome}>Welcome back, <Text style={styles.name}>Dilhara</Text></Text>
-                        <Text style={styles.review}>Review or log film you have watched </Text>
-                  </View>
-    </View>
+   
+      <View style={styles.welcomeContainer}>
+            <Text style={styles.welcome}>Welcome back, <Text style={styles.name}>Dilhara</Text></Text>
+            <Text style={styles.review}>Review or log film you have watched </Text>
+      </View>
+    
   )
 }
 
