@@ -7,16 +7,6 @@ const options = {
   }
 };
 
-// fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
-//   .then(res => res.json())
-//   .then(res => console.log(res))
-//   .catch(err => console.error(err));
-
-// const NOW_PLAYING_API_URL = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`;
-const POPULAR_API_URL = `https://api.themoviedb.org/3/movie/popular?language=en-US&page=1`;
-// const TOP_RATED_API_URL = `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1`;
-// const UPCOMONG_API_URL = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1`;
-
 const BASE_URL = 'https://api.themoviedb.org/3/movie';
 const LANGUAGE_PAGE_PARAMS = '?language=en-US&page=1';
 
@@ -24,9 +14,9 @@ const LANGUAGE_PAGE_PARAMS = '?language=en-US&page=1';
 
 export const fetchMovies = async (category:string) => {
       const URL = `${BASE_URL}/${category}${LANGUAGE_PAGE_PARAMS}`
-      console.log("url:",URL)
+      // console.log("url:", URL)
       try {
-            const response = await fetch(POPULAR_API_URL, options);
+            const response = await fetch(URL, options);
             
             const data = await response.json();
             console.log("data",data)

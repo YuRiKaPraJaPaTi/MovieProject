@@ -10,7 +10,7 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProps) => {
-  console.log("image is:", image)
+  // console.log("image is:", image)
       return (
       <View style={styles.card}>
             <Image source={{uri: image}} style={styles.image} />
