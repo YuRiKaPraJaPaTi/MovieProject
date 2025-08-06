@@ -22,16 +22,8 @@ const MovieSection = ({ title, category }: Props) => {
   if (title === 'Top Rated') sectionType = 'Top Rated';
 
   const [data, setData] = useState<MovieItem[]>([]);
-   const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   const getMovies = async () => {
-  //     const movies = await fetchMovies(category);
-  //     setData(movies);
-  //   };
-  //   getMovies();
-  // }, [category]);
 
   useEffect(() => {
     const getMovies = async () => {
@@ -58,7 +50,9 @@ const MovieSection = ({ title, category }: Props) => {
 
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
+
+        <Text style={styles.sectionTitle}>{title}</Text>
+        
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -74,6 +68,7 @@ const MovieSection = ({ title, category }: Props) => {
         horizontal
         showsHorizontalScrollIndicator={false}
       />
+      
     </View>
   );
 };
@@ -88,6 +83,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 600,
     color: '#FFFFFF',
-    marginBottom: 12,
   },
+  unicode: {
+    color: '#FFCA45',
+    fontSize: 20,
+  },
+  page: {
+    color: '#FFFFFF',
+    fontSize: 20,
+  }
 });
