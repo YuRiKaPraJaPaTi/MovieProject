@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 
       },
       welcomeContainer: {
-            marginTop: 24,
+            marginVertical: 24,
       },
       welcome: {
             fontSize: 28,
