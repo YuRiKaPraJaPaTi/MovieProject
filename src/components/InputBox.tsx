@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View, Image, TouchableOpacity, Text } from 'react-native'
+import { StyleSheet, TextInput, View, Image} from 'react-native'
 import React from 'react'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -8,10 +8,9 @@ interface props {
       style?: object;
       value?: string;
       onChangeText?: (text:string)=>void;
-      hasError?: boolean;
 }
 
-const InputBox = ({iconName, placeholder, style, value, onChangeText, hasError}:props) => {
+const InputBox = ({iconName, placeholder, style, value, onChangeText}:props) => {
       return (
             <View style={[styles.inputContainer, style]}>
                   <Image source ={iconName}  style={styles.icon} />
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             width: '100%',
             height: 40,
-            backgroundColor: 'rgba(255, 255, 255, 0.32)',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
             borderRadius: 16,
             paddingHorizontal: 10,
             marginBottom: 20,
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
             marginRight: 10,
             height:30,
             width: 30,
-            //     color: 'rgba(255, 255, 255, 0.9)',
       },
 
       input: {

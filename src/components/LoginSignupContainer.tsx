@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import InputBox from './InputBox'
 import MyButton from './MyButton'
@@ -20,9 +20,9 @@ interface FormProps {
 }
 
 export interface FormValues {
-  username?: string;
-  email: string;
-  password: string;
+      username?: string;
+      email: string;
+      password: string;
   
 }
 
@@ -83,78 +83,86 @@ const LoginSignupContainer = ({title, buttonLabel,onToggleForm,onSubmit, externa
             }
       };
       
-  return (
-      <View style={styles.signupContainer}>
+      return (
+            <KeyboardAvoidingView style={{ flex: 1 }} >
+                  <ScrollView contentContainerStyle={styles.scrollContainer} >
 
-                  <Text style={styles.title}>{title}</Text>
+                        <View style={styles.signupContainer}>
 
-                  <Text style={styles.text1}>
-                         {title === 'SignUp' ? 'Create an account to continue' : 'Please login to continue'}
-                  </Text>
+                              <Text style={styles.title}>{title}</Text>
 
-                  
-                  {title === 'SignUp' && (
-                  <InputBox 
-                        iconName={require('../assets/Username.png')} placeholder='Username' 
-                        value={form.username!}
-                        onChangeText={(text) => setForm({ ...form, username: text })}
-                        style={[externalErrors?.username && styles.errorBorder]}
-                  />
-                  )}
+                              <Text style={styles.text1}>
+                                    {title === 'SignUp' ? 'Create an account to continue' : 'Please login to continue'}
+                              </Text>
 
-                  <InputBox 
-                        iconName={require('../assets/Email.png')} 
-                        placeholder='Email'
-                        value={form.email}
-                        onChangeText={handleEmailChange}
-                        style={[(!emailValid || externalErrors?.email) && styles.errorBorder]}
-                  />
-                  {(!emailValid || externalErrors?.email) && (
-                        <Text style={styles.errorText}>{externalErrors?.email || emailError}</Text>
-                  )}
+                              
+                              {title === 'SignUp' && (
+                              <InputBox 
+                                    iconName={require('../assets/Username.png')} placeholder='Username' 
+                                    value={form.username!}
+                                    onChangeText={(text) => setForm({ ...form, username: text })}
+                                    style={[externalErrors?.username && styles.errorBorder]}
+                              />
+                              )}
 
-                  <InputBox 
-                        iconName={require('../assets/Password.png')} 
-                        placeholder='Password'
-                        value={form.password}
-                        onChangeText={handlePasswordChange}
-                        style={[(!passwordValid || externalErrors?.password) && styles.errorBorder]}
-                  />
-                  {(!passwordValid || externalErrors?.password) && (
-                        <Text style={styles.errorText}>{externalErrors?.password || passwordError}</Text>
-                  )}
+                              <InputBox 
+                                    iconName={require('../assets/Email.png')} 
+                                    placeholder='Email'
+                                    value={form.email}
+                                    onChangeText={handleEmailChange}
+                                    style={[(!emailValid || externalErrors?.email) && styles.errorBorder]}
+                              />
+                              {(!emailValid || externalErrors?.email) && (
+                                    <Text style={styles.errorText}>{externalErrors?.email || emailError}</Text>
+                              )}
 
-                  
+                              <InputBox 
+                                    iconName={require('../assets/Password.png')} 
+                                    placeholder='Password'
+                                    value={form.password}
+                                    onChangeText={handlePasswordChange}
+                                    style={[(!passwordValid || externalErrors?.password) && styles.errorBorder]}
+                              />
+                              {(!passwordValid || externalErrors?.password) && (
+                                    <Text style={styles.errorText}>{externalErrors?.password || passwordError}</Text>
+                              )}
 
-                  <MyButton label={buttonLabel} onPress={handleSubmit} loading={loading}/>
-                  
-                  <View style={styles.foot}>
-                        <Text style={styles.normalText}>
-                              {title === 'SignUp' ? 'Already have an account?' : "Don't have an account?"}
-                        </Text>
-                        <TouchableOpacity onPress={onToggleForm}>
-                        <Text style={styles.signupLink}> {title === 'SignUp' ? ' Login' : ' SignUp'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.normalText}>{title === 'SignUp' ? ' here' : ' first'}</Text>
-                  </View>
+                              
 
-                  <Text style={{fontSize:16, marginVertical:10, color:'white'}}>OR</Text>
+                              <MyButton label={buttonLabel} onPress={handleSubmit} loading={loading}/>
+                              
+                              <View style={styles.foot}>
+                                    <Text style={styles.normalText}>
+                                          {title === 'SignUp' ? 'Already have an account?' : "Don't have an account?"}
+                                    </Text>
+                                    <TouchableOpacity onPress={onToggleForm}>
+                                    <Text style={styles.signupLink}> {title === 'SignUp' ? ' Login' : ' SignUp'}</Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.normalText}>{title === 'SignUp' ? ' here' : ' first'}</Text>
+                              </View>
+                              
 
-                  <GoogleButton label='Google' iconName='google'/>
-                  
-            </View>
-  )
+                              <Text style={{fontSize:16, marginVertical:10, color:'white'}}>OR</Text>
+
+                              <GoogleButton label='Google' iconName={require('../assets/google.png')}/>
+                        </View>
+                  </ScrollView>
+            </KeyboardAvoidingView>
+      )
 }
 
 export default LoginSignupContainer
 
 const styles = StyleSheet.create({
-       signupContainer: {
-            position: 'relative', 
-            top:250, 
+      scrollContainer: {
+            flexGrow: 1,
+            justifyContent: 'flex-end', 
+      },
+      signupContainer: {
             padding: 20,
-            backgroundColor: 'rgba(255, 255, 255, 0.4)', 
-            // backgroundColor: 'gray',
+            backgroundColor: 'rgba(158, 137, 137, 0.4)', 
+            borderWidth: 2,
+            borderColor: "#00000030",
             borderRadius: 20,
             justifyContent: 'center',
             alignItems: 'center',
@@ -189,14 +197,14 @@ const styles = StyleSheet.create({
             color: '#FFCA45', 
             fontWeight: 600,
       },
-        errorBorder: {
-    borderColor: 'red',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 14,
-    marginBottom: 10,
-    marginLeft: 10,
-  },
+      errorBorder: {
+      borderColor: 'red',
+      },
+      errorText: {
+            color: 'red',
+            fontSize: 14,
+            marginBottom: 10,
+            marginLeft: 10,
+      },
  
 })
