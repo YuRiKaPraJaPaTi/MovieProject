@@ -22,7 +22,7 @@ const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProp
             )}
 
             {section === 'Top Rated' && rating !== undefined && (
-                  <Text style={styles.metaText}>⭐ {rating}</Text>
+                  <Text style={styles.metaText}>⭐ {rating.toFixed(1)}</Text>
             )}
             
       </View>

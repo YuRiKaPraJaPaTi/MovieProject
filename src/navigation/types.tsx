@@ -16,7 +16,7 @@ export type BottomTabParamList = {
 
 export type RootStackParamList = {
   Tabs: NavigatorScreenParams<BottomTabParamList>;
-  Movie: undefined;
+  Movie: { movieId: string };
   Review: undefined;
 
 }

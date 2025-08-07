@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MovieCard from './MovieCard';
 import { fetchMovies } from '../../TMDBapi/TMDB';
 import Pagination from './Pagination';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/types';
+
+type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
+
 
 interface MovieItem {
   id: string;
@@ -18,6 +24,8 @@ interface Props {
 }
 
 const MovieSection = ({ title, category }: Props) => {
+  const navigation = useNavigation<MovieScreenNavigationProp>();
+
   let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' = 'Now Playing';
   if (title === 'Upcoming') sectionType = 'Upcoming';
   if (title === 'Top Rated') sectionType = 'Top Rated';
@@ -50,6 +58,8 @@ const MovieSection = ({ title, category }: Props) => {
     getMovies();
   }, [category, page]);
 
+
+
   return (
     <View style={styles.section}>
 
@@ -62,6 +72,8 @@ const MovieSection = ({ title, category }: Props) => {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
+        <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: item.id })}>
+
           <MovieCard 
             image={item.image} 
             title={item.title} 
@@ -69,6 +81,7 @@ const MovieSection = ({ title, category }: Props) => {
             releaseDate={item.releaseDate}
             section={sectionType}
           />
+          </TouchableOpacity>
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
