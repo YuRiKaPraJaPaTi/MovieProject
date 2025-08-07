@@ -1,26 +1,19 @@
 import axios from 'axios';
+import api from './axiosInstance';
 
-const BASE_URL = 'https://api.themoviedb.org/3/movie';
+
 
 export const fetchMovies = async (category:string, page: number=1) => {
 
-      const options = {
-            method: 'GET',
-            url: `${BASE_URL}/${category}`,
+      try {
+            const { data } = await api.get(`/${category}`, {
             params: {
                   language: 'en-US',
                   page: page.toString(),
-            },
-            headers: {
-                  accept: 'application/json',
-                  Authorization: `Bearer ${process.env.TMDB_API_KEY}`
-            }
-      };
-      try {
-            const response = await axios.request(options);
-
-            const movies = response.data.results;
-            
+            },      
+      
+       });
+            const movies = data.results;
             return movies.map((movie: any) => ({
                   id: movie.id.toString(),
                   title: movie.title,
