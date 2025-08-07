@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { fetchMovieReviews } from '../../TMDBapi/TMDB';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/types';
+import MyButton from '../MyButton';
 
+type ReviewScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
 
 interface ReviewSectionProps {
   movieId: string;
 }
 
 const ReviewSection = ({movieId}: ReviewSectionProps) => {
+      const navigation = useNavigation<ReviewScreenNavigationProp>();
       const [reviews, setReviews] = useState<any[]>([]);
         const [loading, setLoading] = useState(true);
       useEffect(() => {
@@ -24,6 +30,9 @@ const ReviewSection = ({movieId}: ReviewSectionProps) => {
   return (
     <View>
       <Text style={styles.sectionTitle}>Reviews ({reviews.length})</Text>
+
+      <MyButton label='Write a Review' onPress={() => navigation.navigate('Review', { movieId})}/>
+
       {reviews.length > 0 ? (
         reviews.map((item) => (
           <View key={item.id} style={styles.reviewBox}>

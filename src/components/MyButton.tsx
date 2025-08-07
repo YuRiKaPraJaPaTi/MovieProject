@@ -3,8 +3,8 @@ import React from 'react'
 
 type Props = {
       label: string,
-      onPress: ()=>void;
-      loading: boolean;
+      onPress?: ()=>void;
+      loading?: boolean;
 }
 
 const MyButton = ({onPress, label, loading}:Props) => {

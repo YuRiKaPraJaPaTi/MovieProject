@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import { fetchMovieDetails, fetchMovieCredits, fetchMovieReviews } from '../TMDBapi/TMDB';
@@ -12,12 +12,14 @@ const MovieScreen = () => {
   const route = useRoute<MovieScreenRouteProp>();
   const { movieId } = route.params;
 
-
+  
 
   return (
     <ScrollView style={styles.container}>
 
       <TopSection movieId={movieId}/>
+
+      
 
       <ReviewSection movieId={movieId}/>
 
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#002335',
   },
+
 
 });
 
