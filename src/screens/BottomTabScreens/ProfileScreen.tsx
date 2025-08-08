@@ -1,10 +1,11 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import React, { useCallback } from 'react'
-import auth, { getAuth, signOut } from '@react-native-firebase/auth';
+import { getAuth, signOut } from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useAuth } from '../../context/AuthContext';
 
 const ProfileScreen = () => {
-      const user = auth().currentUser;
+      const {user} = useAuth()
       const email = user?.email ?? 'No Email';
       const initial = email.charAt(0).toUpperCase();
 

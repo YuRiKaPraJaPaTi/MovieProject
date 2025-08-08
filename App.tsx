@@ -6,7 +6,7 @@
  */
 
 
-import { StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/context/AuthContext';
@@ -15,14 +15,18 @@ function App() {
 
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
+    <>
+      <StatusBar backgroundColor="#002335" barStyle="light-content" />
+
+      <AuthProvider>
+        <NavigationContainer>
+        
+          <AppNavigator />
       
-        <AppNavigator />
-    
-      </NavigationContainer>
-    </AuthProvider>
-    
+        </NavigationContainer>
+      </AuthProvider>
+      
+    </>
   );
 }
 

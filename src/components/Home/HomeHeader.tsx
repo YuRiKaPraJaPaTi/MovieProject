@@ -1,11 +1,13 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { useAuth } from '../../context/AuthContext'
 
 const HomeHeader = () => {
+      const {user} = useAuth()
   return (
    
       <View style={styles.welcomeContainer}>
-            <Text style={styles.welcome}>Welcome back, <Text style={styles.name}>Dilhara</Text></Text>
+            <Text style={styles.welcome}>Welcome back, <Text style={styles.name}>{user?.email}</Text></Text>
             <Text style={styles.review}>Review or log film you have watched </Text>
       </View>
     
@@ -15,11 +17,8 @@ const HomeHeader = () => {
 export default HomeHeader
 
 const styles = StyleSheet.create({
-      headerContainer: {
-
-      },
       welcomeContainer: {
-            marginVertical: 24,
+            marginBottom: 24,
       },
       welcome: {
             fontSize: 28,

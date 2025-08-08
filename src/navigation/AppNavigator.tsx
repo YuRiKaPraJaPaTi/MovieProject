@@ -21,7 +21,15 @@ const AppNavigator = () => {
                               <RootStack.Screen name="Tabs" component={BottomTabNavigator} 
                               options={{headerShown: false}}
                               />
-                              <RootStack.Screen name="Movie" component={MovieScreen} />
+                              <RootStack.Screen name="Movie" component={MovieScreen} 
+                                    options={{
+                                          headerTitle: 'Movie Detail',
+                                          headerStyle: { backgroundColor: '#002335' },
+                                          headerTintColor: '#FFFFFF', 
+                                          headerTitleStyle: { fontWeight: 'bold' },
+                                          
+                                    }} 
+                              />
                               <RootStack.Screen name="Review" component={ReviewScreen} options={{headerShown: false}} />
                         </>
                   ) : (
