@@ -37,6 +37,9 @@ api.interceptors.response.use(
       console.log("trending url", url)
   
     params = false; 
+  } else if (endpoint === "search") {
+    url = `search/movie`;
+    // params = false
   }
   try {
     const { data } = await api.get(url, {

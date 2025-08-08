@@ -66,7 +66,7 @@ const MovieSection = ({ title, endpoint }: Props) => {
 
       <View style={styles.top}>
         <Text style={styles.sectionTitle}>{title}</Text>
-        <Pagination page={page} setPage={setPage}/>
+          {title !== 'Trending' && <Pagination page={page} setPage={setPage} />}
       </View>
 
       <FlatList
