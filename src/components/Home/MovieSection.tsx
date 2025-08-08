@@ -73,7 +73,7 @@ const MovieSection = ({ title, endpoint }: Props) => {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: item.id })}>
+        <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: item.id, title: item.title, image:item.image })}>
 
           <MovieCard 
             image={item.image} 

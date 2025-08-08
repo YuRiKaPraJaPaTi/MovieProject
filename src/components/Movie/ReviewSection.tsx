@@ -12,6 +12,8 @@ type ReviewScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 
 
 interface ReviewSectionProps {
   movieId: string;
+  title: string;
+  image: any;
 }
 
 interface Review {
@@ -22,7 +24,7 @@ interface Review {
   source: 'tmdb' | 'firebase';
 }
 
-const ReviewSection = ({movieId}: ReviewSectionProps) => {
+const ReviewSection = ({movieId, title, image}: ReviewSectionProps) => {
   const navigation = useNavigation<ReviewScreenNavigationProp>();
   const [tmdbReviews, setTmdbReviews] = useState<Review[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -80,7 +82,7 @@ const ReviewSection = ({movieId}: ReviewSectionProps) => {
     <View>
       <Text style={styles.sectionTitle}>Reviews ({reviews.length})</Text>
 
-      <MyButton label='Write a Review' onPress={() => navigation.navigate('Review', { movieId})}/>
+      <MyButton label='Write a Review' onPress={() => navigation.navigate('Review', {movieId, title, image})}/>
 
       {reviews.length > 0 ? (
         reviews.map((item) => (

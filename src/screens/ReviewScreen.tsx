@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput,TouchableOpacity,View } from 'react-native'
+import { Image, StyleSheet, Text, TextInput,TouchableOpacity,View } from 'react-native'
 import React, { useState } from 'react'
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
@@ -17,7 +17,7 @@ const ReviewScreen = () => {
   const route = useRoute<ReviewScreenRouteProp>();
   const navigation = useNavigation();
 
-  const { movieId } = route.params;
+  const { movieId, title, image } = route.params;
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
   const [canEditRating, setCanEditRating] = useState(true);
@@ -38,20 +38,40 @@ const ReviewScreen = () => {
   };
   return (
     <View style={styles.container}>
+      <View style={{flexDirection: 'row'}}>
+         <View style={{ flex: 7, paddingRight: 4 }}>
+          <TouchableOpacity style={styles.goback} onPress={() => navigation.goBack()}><Image source={require('../assets/Larrow.png')}/></TouchableOpacity>
+          <Text
+            style={styles.title}
+            numberOfLines={3} 
+            ellipsizeMode="tail" 
+          >
+            {title}
+          </Text>
+        </View>
+        <View style={{}}>
+          <FastImage 
+        source={{ uri: image }} 
+        style={styles.movieImage} 
+      />
+        </View>
+      </View>
       
       <View style={styles.likerow}>
         <RatingRow rating={rating} setRating={setRating} />
       
-            <TouchableOpacity>
+            <View style={{flexDirection: 'column'}}>
               <Text style={styles.favourite}>Add to Favourite</Text>
-              <FastImage
-                source={require('../assets/Like.png')}
-                style={styles.likeIcon}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity>
+                <FastImage
+                  source={require('../assets/Like.png')}
+                  style={styles.likeIcon}
+                />
+              </TouchableOpacity>
+            </View>
       </View>
 
-      <Text style={styles.label}>Review</Text>
+      
       <TextInput
         placeholder="Write your review..."
         style={styles.input}
@@ -73,6 +93,28 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#002335"
   },
+   movieImage: {
+    width: 160,
+    height: 220,
+    borderRadius: 12,
+    marginBottom: 10,
+    
+  },
+  goback: {
+    height: 40,
+    width: 40,
+    backgroundColor: '#FFFFFF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+  },
+  title: {
+    color: 'white',
+    fontSize: 32,
+    fontWeight: 'bold',
+    flexWrap: 'wrap',
+    marginTop: 24
+  },
 
   starsRow: {
     flexDirection: 'row',
@@ -92,21 +134,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF50',
     borderRadius: 10,
     padding: 10,
-    marginVertical: 10,
-    height: 200,
-    color: '#000',
+    marginTop: 10,
+    marginBottom: 28,
+    height: 250,
+    color: '#FFFFFFBHG',
     textAlignVertical: 'top',
-  },
-  button: {
-    backgroundColor: '#FFCA45',
-    marginTop: 20,
-    borderRadius: 10,
-    padding: 15,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
+    fontSize: 24,
+  
   },
   likerow: {
     flexDirection: 'row',
@@ -121,5 +155,6 @@ const styles = StyleSheet.create({
   favourite: {
     color: '#FFFFFF',
     gap: 10,
+    fontSize: 16,
   }
 })

@@ -17,7 +17,7 @@ const AppNavigator = () => {
                   options={{headerShown: false}}
                   />
                   <RootStack.Screen name="Movie" component={MovieScreen} />
-                  <RootStack.Screen name="Review" component={ReviewScreen} />
+                  <RootStack.Screen name="Review" component={ReviewScreen} options={{headerShown: false}} />
             </RootStack.Navigator>
       )
 }

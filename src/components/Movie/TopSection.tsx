@@ -13,7 +13,8 @@ interface Credits {
 
 const TopSection = ({movieId}:Props) => {
   const [movie, setMovie] = useState<any>(null);
-  const [credits, setCredits] = useState<Credits>({ director: null, cast: [] });
+  const [credits, setCredits] = useState<Credits | undefined>(undefined);
+
   const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -58,7 +59,7 @@ const TopSection = ({movieId}:Props) => {
 
           <Text style={styles.director}>
               <Image source={require('../../assets/Director.png')} />  Directed by{' '}
-              <Text style={styles.directorName}>{credits.director}</Text>
+              <Text style={styles.directorName}>{credits!.director}</Text>
           </Text>
 
           <Text style={styles.director}>
@@ -82,7 +83,7 @@ const TopSection = ({movieId}:Props) => {
       <Text style={styles.overview}>{movie?.overview}</Text>
 
       <Text style={styles.castTitle}>Cast</Text>
-      <Text style={{color: '#FFFFFF',}}>{credits.cast.join(', ')}</Text>
+      <Text style={{color: '#FFFFFF',}}>{credits!.cast.join(', ')}</Text>
 
     </View>
   

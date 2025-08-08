@@ -9,7 +9,8 @@ type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
 
 const MovieScreen = () => {
   const route = useRoute<MovieScreenRouteProp>();
-  const { movieId } = route.params;
+  const { movieId, title, image } = route.params;
+  
 
   
 
@@ -18,7 +19,7 @@ const MovieScreen = () => {
 
       <TopSection movieId={movieId}/>
 
-      <ReviewSection movieId={movieId}/>
+      <ReviewSection movieId={movieId} title={title} image={image}/>
 
     </ScrollView>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 interface MovieCardProps {
@@ -18,9 +18,18 @@ const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProp
             
             <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
 
+             
             {section === 'Upcoming' && releaseDate && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'space-between' }}>
                   <Text style={styles.metaText}>📅 {releaseDate}</Text>
+                  <TouchableOpacity>
+                  <Text style={styles.metaText}> 🔖 </Text>
+                </TouchableOpacity>
+              </View>
             )}
+            
+    
+    
 
             {section === 'Top Rated' && rating !== undefined && (
                   <Text style={styles.metaText}>⭐ {rating.toFixed(1)}</Text>
