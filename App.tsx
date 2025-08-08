@@ -6,48 +6,27 @@
  */
 
 
-import { StyleSheet, View } from 'react-native';
-import WelcomeScreen from './src/screens/Auth/WelcomeScreen';
+import { StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import AuthStack from './src/navigation/AuthStack';
-import BottomTabNavigator from './src/navigation/BottomTabNavigator';
 import AppNavigator from './src/navigation/AppNavigator';
-import { useEffect, useRef, useState } from 'react';
-import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
+import { AuthProvider } from './src/context/AuthContext';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [initializing, setInitializing] = useState(true);
 
-  const auth = getAuth();
-  const user = auth.currentUser;
-
-  // Handle authentication state
-  useEffect(() => {
-    const subscriber = onAuthStateChanged(getAuth(), user => {
-      setIsLoggedIn(!!user);
-      if (initializing) setInitializing(false);
-    });
-
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-
-
-  if (initializing) return null;
 
   return (
-     <NavigationContainer>
-      {/* <AuthStack /> */}
-      {/* <BottomTabNavigator/> */}
-      {/* <AppNavigator /> */}
-      {isLoggedIn ? (
+    <>
+      <StatusBar backgroundColor="#002335" barStyle="light-content" />
+
+      <AuthProvider>
+        <NavigationContainer>
+        
           <AppNavigator />
-          ) : (
-          <AuthStack onLogin={() => setIsLoggedIn(true)} />
-        )}
-    </NavigationContainer>
-    
+      
+        </NavigationContainer>
+      </AuthProvider>
+      
+    </>
   );
 }
 

@@ -1,20 +1,20 @@
 import { Alert, Image, ImageBackground, StyleSheet } from 'react-native'
 import React, { useCallback, useState } from 'react'
-import { AuthStackParamList } from '../../navigation/types';
+import { RootStackParamList } from '../../navigation/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import LoginSignupContainer, { FormValues } from '../../components/LoginSignupContainer';
 import auth from '@react-native-firebase/auth';
+import { useAuth } from '../../context/AuthContext';
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Login'> & {
-      onLogin: () => void;
-};
+type Props = NativeStackScreenProps<RootStackParamList, 'Login'> 
 
 type FieldErrors = { email?: string; password?: string };
 
 
-const LoginScreen = ({navigation, onLogin}:Props) => {
+const LoginScreen = ({navigation}:Props) => {
       const [loading, setLoading] = useState(false);
       const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+      const { setUser } = useAuth(); 
 
       const handleLogin = useCallback((form: FormValues) => {
             const { email, password } = form;
@@ -35,8 +35,7 @@ const LoginScreen = ({navigation, onLogin}:Props) => {
             auth()
                   .signInWithEmailAndPassword(email, password)
                   .then(() => {
-                  onLogin();
-                  // navigation.navigate('Signup')
+                  // navigation.navigate('Tabs')
                   })
                   .catch((error) => {
                   // Handle Firebase authentication errors
@@ -66,7 +65,7 @@ const LoginScreen = ({navigation, onLogin}:Props) => {
                   .finally(() => {
                   setLoading(false);
                   });
-      },[onLogin]);
+      },[navigation, setUser]);
       
   return (
    
