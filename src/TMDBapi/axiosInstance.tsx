@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const api = axios.create({
-  baseURL: 'https://api.themoviedb.org/3/movie',
+const api = axios.create({
+  baseURL: 'https://api.themoviedb.org/3/',
   headers: {
     'Accept': 'application/json',
   },
@@ -28,7 +28,16 @@ api.interceptors.response.use(
 );
 
 // Helper function to handle API requests
- export const fetchFromAPI = async (url: string, params = {}) => {
+ export const fetchFromAPI = async (endpoint: string, params = {}) => {
+  let url = `movie/${endpoint}`
+    console.log(" url", url)
+
+  if(endpoint == "trending") {
+    url = `${endpoint}/movie/day`
+      console.log("trending url", url)
+  
+    params = false; 
+  }
   try {
     const { data } = await api.get(url, {
       params: { language: 'en-US', ...params },
@@ -42,4 +51,4 @@ api.interceptors.response.use(
 
 
 
-
+export default api;

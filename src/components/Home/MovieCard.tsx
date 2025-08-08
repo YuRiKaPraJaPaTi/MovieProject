@@ -7,7 +7,7 @@ interface MovieCardProps {
       title: string;
       rating?: number;
       releaseDate?: string;
-      section: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular'
+      section: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending'
 }
 
 const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProps) => {

@@ -33,10 +33,11 @@ const HomeScreen = () => {
 
         <HomeHeader />
 
-        <MovieSection title="Now Playing" category='now_playing'/>
-        <MovieSection title="Upcoming" category="upcoming" />
-        <MovieSection title="Top Rated" category="top_rated" />
-        <MovieSection title="Popular" category="popular" />
+        <MovieSection title="Now Playing" endpoint='now_playing'/>
+        <MovieSection title="Upcoming" endpoint="upcoming" />
+        <MovieSection title="Top Rated" endpoint="top_rated" />
+        <MovieSection title="Popular" endpoint="popular" />
+      
 
         {/* <MovieSection title="Upcoming" data={dummyMovieData.upcoming} />
         <MovieSection title="Ranked" data={dummyMovieData.ranked} /> */}

@@ -2,9 +2,9 @@ import  { fetchFromAPI } from './axiosInstance';
 
 
 // fetch movie from category
-export const fetchMovies = async (category:string, page: number=1) => {
+export const fetchMovies = async (endpoint:string, page: number=1) => {
 
-      const data = await fetchFromAPI(`/${category}`, {page})
+      const data = await fetchFromAPI(`${endpoint}`, {page})
       if (data) {
             const movies = data.results;
             return movies.map((movie: any) => ({
@@ -43,7 +43,7 @@ export const fetchMovieDetails = async (movieId: string) => {
 
 // Fetch credits (cast & crew)
 export const fetchMovieCredits = async (movieId: string) => {
-      const data  = await fetchFromAPI(`/${movieId}/credits`)
+      const data  = await fetchFromAPI(`${movieId}/credits`)
       if (data) {
             const director = data.crew.find((person: any) => person.job === 'Director')?.name;
             const cast = data.cast.slice(0, 5).map((actor: any) => actor.name);
@@ -55,7 +55,7 @@ export const fetchMovieCredits = async (movieId: string) => {
 
 // Fetch movie reviews
 export const fetchMovieReviews = async (movieId: string, page: number = 1) => {
-      const data = await fetchFromAPI(`/${movieId}/reviews`, { page });
+      const data = await fetchFromAPI(`${movieId}/reviews`, { page });
       if (data) {
             return data?.results || [];
       } 

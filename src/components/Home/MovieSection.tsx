@@ -20,15 +20,16 @@ interface MovieItem {
 
 interface Props {
   title: string;
-  category: string;
+  endpoint: string;
 }
 
-const MovieSection = ({ title, category }: Props) => {
+const MovieSection = ({ title, endpoint }: Props) => {
   const navigation = useNavigation<MovieScreenNavigationProp>();
 
-  let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' = 'Now Playing';
+  let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' = 'Now Playing';
   if (title === 'Upcoming') sectionType = 'Upcoming';
   if (title === 'Top Rated') sectionType = 'Top Rated';
+  if (title === 'Trending') sectionType = 'Trending';
 
   const [data, setData] = useState<MovieItem[]>([]);
   const [page, setPage] = useState(1);
@@ -42,7 +43,7 @@ const MovieSection = ({ title, category }: Props) => {
 
       try {
         // Fetch the movies for the given category
-        const movies = await fetchMovies(category, page);
+        const movies = await fetchMovies(endpoint, page);
 
         // After getting the movies, update the state
         setData(movies);
@@ -56,7 +57,7 @@ const MovieSection = ({ title, category }: Props) => {
     };
 
     getMovies();
-  }, [category, page]);
+  }, [endpoint, page]);
 
 
 
