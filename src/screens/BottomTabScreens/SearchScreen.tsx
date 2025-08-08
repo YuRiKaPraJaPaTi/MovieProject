@@ -33,14 +33,14 @@ const SearchScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-      <TextInput
-        placeholder='Search movie...'
-        style={styles.searchBar}
-        value={query}
-        onChangeText={handleChangeText}
-        onSubmitEditing={handleSearch}
-      />
-      <Icon name="search" size={24} color="#FFFFFF90" style={styles.searchIcon} /> 
+        <TextInput
+          placeholder='Search movie...'
+          style={styles.searchBar}
+          value={query}
+          onChangeText={handleChangeText}
+          onSubmitEditing={handleSearch}
+        />
+        <Icon name="search" size={24} color="#FFFFFF90" style={styles.searchIcon} onPress={handleSearch}/> 
       </View>
       <ScrollView>
         {results.length > 0 && (
