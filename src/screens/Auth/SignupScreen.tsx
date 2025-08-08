@@ -1,12 +1,12 @@
 import { Alert, ImageBackground, StyleSheet} from 'react-native'
 import React, { useCallback, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigation/types';
+import {RootStackParamList } from '../../navigation/types';
 import { Image } from 'react-native/';
 import LoginSignupContainer, { FormValues } from '../../components/LoginSignupContainer';
 import { createUserWithEmailAndPassword, getAuth } from '@react-native-firebase/auth';
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Signup'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Signup'>;
 
 const SignupScreen = ({navigation}: Props) => {
       const [loading, setLoading] = useState(false);
@@ -31,7 +31,6 @@ const SignupScreen = ({navigation}: Props) => {
     createUserWithEmailAndPassword(getAuth(), email, password)
     .then(() => {
       Alert.alert('Account created successfully!');
-      navigation.navigate('Login');
     })
     .catch((error) => {
       const errorMap: typeof fieldErrors = {};
