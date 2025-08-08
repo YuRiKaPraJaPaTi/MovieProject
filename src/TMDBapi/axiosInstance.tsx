@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: 'https://api.themoviedb.org/3/movie',
   headers: {
     'Accept': 'application/json',
@@ -19,7 +19,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-
 api.interceptors.response.use(
   (response) => {
   
@@ -28,4 +27,19 @@ api.interceptors.response.use(
   (error) => Promise.reject(error)
 );
 
-export default api;
+// Helper function to handle API requests
+ export const fetchFromAPI = async (url: string, params = {}) => {
+  try {
+    const { data } = await api.get(url, {
+      params: { language: 'en-US', ...params },
+    });
+    return data;
+  } catch (error) {
+    console.error(`Error fetching from ${url}:`, error);
+    return null;
+  }
+};
+
+
+
+
