@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 interface MovieCardProps {
       image: any;
@@ -13,7 +14,7 @@ const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProp
   // console.log("image is:", image)
       return (
       <View style={styles.card}>
-            <Image source={{uri: image}} style={styles.image} />
+            <FastImage source={{uri: image}} style={styles.image} />
             
             <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
 

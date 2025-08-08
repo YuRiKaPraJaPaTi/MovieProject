@@ -1,5 +1,6 @@
-import { StyleSheet, TextInput, View, Image} from 'react-native'
+import { StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
+import FastImage from 'react-native-fast-image';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface props {
@@ -13,7 +14,7 @@ interface props {
 const InputBox = ({iconName, placeholder, style, value, onChangeText}:props) => {
       return (
             <View style={[styles.inputContainer, style]}>
-                  <Image source ={iconName}  style={styles.icon} />
+                  <FastImage source ={iconName}  style={styles.icon} />
             
             <TextInput  style={[styles.input]}
                   placeholder={placeholder}

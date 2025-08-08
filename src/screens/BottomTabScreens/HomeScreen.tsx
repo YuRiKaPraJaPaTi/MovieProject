@@ -1,8 +1,8 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import React from 'react'
 import HomeHeader from '../../components/Home/HomeHeader'
 import MovieSection from '../../components/Home/MovieSection';
-import { fetchMovies } from '../../TMDBapi/TMDB';
+import FastImage from 'react-native-fast-image';
 
 export const dummyMovieData = {
   // newReleases: [
@@ -27,7 +27,7 @@ const HomeScreen = () => {
 
   return (
     <View style={{flex:1, backgroundColor:"#002335",padding:20}}>
-      <Image source={require('../../assets/LOGOcinephiler.png')} />
+      <FastImage source={require('../../assets/LOGOcinephiler.png')} />
       
       <ScrollView>
 

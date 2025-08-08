@@ -1,13 +1,12 @@
-import { StyleSheet, Text, TextInput,TouchableOpacity,View, Image } from 'react-native'
+import { StyleSheet, Text, TextInput,TouchableOpacity,View } from 'react-native'
 import React, { useState } from 'react'
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import MyButton from '../components/MyButton';
-import auth from '@react-native-firebase/auth';
 import RatingRow from '../components/RatingRow';
-import firestore from "@react-native-firebase/firestore";
 import { addReview } from '../firebase/ReviewService';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 
 
@@ -45,7 +44,7 @@ const ReviewScreen = () => {
       
             <TouchableOpacity>
               <Text style={styles.favourite}>Add to Favourite</Text>
-              <Image
+              <FastImage
                 source={require('../assets/Like.png')}
                 style={styles.likeIcon}
               />
