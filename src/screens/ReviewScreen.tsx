@@ -6,13 +6,18 @@ import MyButton from '../components/MyButton';
 import auth from '@react-native-firebase/auth';
 import RatingRow from '../components/RatingRow';
 import firestore from "@react-native-firebase/firestore";
+import { addReview } from '../firebase/ReviewService';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 type ReviewScreenRouteProp = RouteProp<RootStackParamList, 'Review'>;
 
+
 const ReviewScreen = () => {
   const route = useRoute<ReviewScreenRouteProp>();
-  const userId = auth().currentUser?.uid;
+  const navigation = useNavigation();
+
   const { movieId } = route.params;
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
@@ -22,16 +27,11 @@ const ReviewScreen = () => {
     if (!comment && rating === 0) return;
 
     try {
-      await firestore().collection('reviews').add({
-        userId,
-        movieId,
-        comment,
-        rating,
-        createdAt: firestore.FieldValue.serverTimestamp(),
-      });
+      await addReview(movieId, comment, rating)
     
       setComment('');
       setCanEditRating(false);
+      navigation.goBack();
       
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -44,6 +44,7 @@ const ReviewScreen = () => {
         <RatingRow rating={rating} setRating={setRating} />
       
             <TouchableOpacity>
+              <Text style={styles.favourite}>Add to Favourite</Text>
               <Image
                 source={require('../assets/Like.png')}
                 style={styles.likeIcon}
@@ -118,4 +119,8 @@ const styles = StyleSheet.create({
     height: 30,
     marginLeft: 'auto',
   },
+  favourite: {
+    color: '#FFFFFF',
+    gap: 10,
+  }
 })
