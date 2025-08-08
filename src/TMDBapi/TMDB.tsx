@@ -1,26 +1,12 @@
-import axios from 'axios';
+import  { fetchFromAPI } from './axiosInstance';
 
-const BASE_URL = 'https://api.themoviedb.org/3/movie';
 
-export const fetchMovies = async (category:string, page: number=1) => {
+// fetch movie from category
+export const fetchMovies = async (endpoint:string, page: number=1) => {
 
-      const options = {
-            method: 'GET',
-            url: `${BASE_URL}/${category}`,
-            params: {
-                  language: 'en-US',
-                  page: page.toString(),
-            },
-            headers: {
-                  accept: 'application/json',
-                  Authorization: `Bearer ${process.env.TMDB_API_KEY}`
-            }
-      };
-      try {
-            const response = await axios.request(options);
-
-            const movies = response.data.results;
-            
+      const data = await fetchFromAPI(`${endpoint}`, {page})
+      if (data) {
+            const movies = data.results;
             return movies.map((movie: any) => ({
                   id: movie.id.toString(),
                   title: movie.title,
@@ -29,9 +15,51 @@ export const fetchMovies = async (category:string, page: number=1) => {
                   rating: movie.vote_average,
             }));
 
-      } catch (error) {
-            console.error('Error fetching now playing movies:', error);
-            return [] ;
-      
       }
+      return [] ;
+      
+}
+
+
+// Fetch movie details
+export const fetchMovieDetails = async (movieId: string) => {
+      const data = await fetchFromAPI(`/${movieId}`)
+      if (data) {
+      return {
+            title: data.title,
+            releaseDate: data.release_date,
+            overview: data.overview,
+            rating: data.vote_average,
+            image: `https://image.tmdb.org/t/p/w780${data.poster_path}`,
+            backdropImage: `https://image.tmdb.org/t/p/w780${data.backdrop_path}`,
+            tagline: data.tagline,
+            duration: data.runtime,
+            genres: data.genres.map((g: any) => g.name).join(', '),
+      };
+      } 
+      return null;
+      }
+
+
+// Fetch credits (cast & crew)
+export const fetchMovieCredits = async (movieId: string) => {
+      const data  = await fetchFromAPI(`${movieId}/credits`)
+      if (data) {
+            const director = data.crew.find((person: any) => person.job === 'Director')?.name;
+            const cast = data.cast.slice(0, 5).map((actor: any) => actor.name);
+            // console.log(director)
+            // console.log(cast)
+            return { director, cast };
+      } 
 };
+
+// Fetch movie reviews
+export const fetchMovieReviews = async (movieId: string, page: number = 1) => {
+      const data = await fetchFromAPI(`${movieId}/reviews`, { page });
+      if (data) {
+            return data?.results || [];
+      } 
+}
+
+
+

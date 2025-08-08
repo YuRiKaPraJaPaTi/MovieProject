@@ -1,8 +1,7 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import React from 'react'
 import HomeHeader from '../../components/Home/HomeHeader'
 import MovieSection from '../../components/Home/MovieSection';
-import { fetchMovies } from '../../TMDBapi/TMDB';
 
 export const dummyMovieData = {
   // newReleases: [
@@ -33,10 +32,11 @@ const HomeScreen = () => {
 
         <HomeHeader />
 
-        <MovieSection title="Now Playing" category='now_playing'/>
-        <MovieSection title="Upcoming" category="upcoming" />
-        <MovieSection title="Top Rated" category="top_rated" />
-        <MovieSection title="Popular" category="popular" />
+        <MovieSection title="Now Playing" endpoint='now_playing'/>
+        <MovieSection title="Upcoming" endpoint="upcoming" />
+        <MovieSection title="Top Rated" endpoint="top_rated" />
+        <MovieSection title="Popular" endpoint="popular" />
+      
 
         {/* <MovieSection title="Upcoming" data={dummyMovieData.upcoming} />
         <MovieSection title="Ranked" data={dummyMovieData.ranked} /> */}

@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard } from 'react-native'
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import React, { useState } from 'react'
 import InputBox from './InputBox'
 import MyButton from './MyButton'

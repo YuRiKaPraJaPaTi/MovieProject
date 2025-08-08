@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MovieCard from './MovieCard';
 import { fetchMovies } from '../../TMDBapi/TMDB';
 import Pagination from './Pagination';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/types';
+
+type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
+
 
 interface MovieItem {
   id: string;
@@ -14,13 +20,16 @@ interface MovieItem {
 
 interface Props {
   title: string;
-  category: string;
+  endpoint: string;
 }
 
-const MovieSection = ({ title, category }: Props) => {
-  let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' = 'Now Playing';
+const MovieSection = ({ title, endpoint }: Props) => {
+  const navigation = useNavigation<MovieScreenNavigationProp>();
+
+  let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' = 'Now Playing';
   if (title === 'Upcoming') sectionType = 'Upcoming';
   if (title === 'Top Rated') sectionType = 'Top Rated';
+  if (title === 'Trending') sectionType = 'Trending';
 
   const [data, setData] = useState<MovieItem[]>([]);
   const [page, setPage] = useState(1);
@@ -34,7 +43,7 @@ const MovieSection = ({ title, category }: Props) => {
 
       try {
         // Fetch the movies for the given category
-        const movies = await fetchMovies(category, page);
+        const movies = await fetchMovies(endpoint, page);
 
         // After getting the movies, update the state
         setData(movies);
@@ -48,20 +57,24 @@ const MovieSection = ({ title, category }: Props) => {
     };
 
     getMovies();
-  }, [category, page]);
+  }, [endpoint, page]);
+
+
 
   return (
     <View style={styles.section}>
 
       <View style={styles.top}>
         <Text style={styles.sectionTitle}>{title}</Text>
-        <Pagination page={page} setPage={setPage}/>
+          {title !== 'Trending' && <Pagination page={page} setPage={setPage} />}
       </View>
 
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
+        <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: item.id, title: item.title, image:item.image })}>
+
           <MovieCard 
             image={item.image} 
             title={item.title} 
@@ -69,6 +82,7 @@ const MovieSection = ({ title, category }: Props) => {
             releaseDate={item.releaseDate}
             section={sectionType}
           />
+          </TouchableOpacity>
         )}
         horizontal
         showsHorizontalScrollIndicator={false}

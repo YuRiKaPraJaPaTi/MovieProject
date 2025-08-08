@@ -1,28 +1,38 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 interface MovieCardProps {
       image: any;
       title: string;
       rating?: number;
       releaseDate?: string;
-      section: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular'
+      section: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Search'
 }
 
 const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProps) => {
   // console.log("image is:", image)
       return (
       <View style={styles.card}>
-            <Image source={{uri: image}} style={styles.image} />
+            <FastImage source={{uri: image}} style={styles.image} />
             
             <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
 
+             
             {section === 'Upcoming' && releaseDate && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'space-between' }}>
                   <Text style={styles.metaText}>📅 {releaseDate}</Text>
+                  <TouchableOpacity>
+                  <Text style={styles.metaText}> 🔖 </Text>
+                </TouchableOpacity>
+              </View>
             )}
+            
+    
+    
 
             {section === 'Top Rated' && rating !== undefined && (
-                  <Text style={styles.metaText}>⭐ {rating}</Text>
+                  <Text style={styles.metaText}>⭐ {rating.toFixed(1)}</Text>
             )}
             
       </View>
