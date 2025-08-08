@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, TextInput,TouchableOpacity,View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Image, StyleSheet, Text, TextInput,TouchableOpacity,View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import MyButton from '../components/MyButton';
@@ -7,6 +7,9 @@ import RatingRow from '../components/RatingRow';
 import { addReview } from '../firebase/ReviewService';
 import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import api from '../TMDBapi/axiosInstance';
+import { addToFavourite } from '../TMDBapi/addFavourite';
+import { ToastAndroid } from 'react-native';
 
 
 
@@ -21,6 +24,26 @@ const ReviewScreen = () => {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
   const [canEditRating, setCanEditRating] = useState(true);
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+
+  const handleToggleFavorite = async () => {
+    const newStatus = !isFavorite;
+    try {
+      const result = await addToFavourite(newStatus, movieId);
+      if (result.success) {
+        setIsFavorite(newStatus);
+        ToastAndroid.show(
+          newStatus ? 'Added to favourites!' : 'Removed from favourites!', 
+          ToastAndroid.SHORT);
+      } else {
+        Alert.alert('Failed, Try again');
+      }
+    } catch (err) {
+      Alert.alert('Error', 'Could not update favourite status.');
+    }
+  };
 
   const handleSubmitReview = async () => {
     if (!comment && rating === 0) return;
@@ -39,7 +62,7 @@ const ReviewScreen = () => {
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
-         <View style={{ flex: 7, paddingRight: 4 }}>
+        <View style={{ flex: 7, paddingRight: 4 }}>
           <TouchableOpacity style={styles.goback} onPress={() => navigation.goBack()}><Image source={require('../assets/Larrow.png')}/></TouchableOpacity>
           <Text
             style={styles.title}
@@ -51,9 +74,9 @@ const ReviewScreen = () => {
         </View>
         <View style={{}}>
           <FastImage 
-        source={{ uri: image }} 
-        style={styles.movieImage} 
-      />
+            source={{ uri: image }} 
+            style={styles.movieImage} 
+          />
         </View>
       </View>
       
@@ -62,10 +85,10 @@ const ReviewScreen = () => {
       
             <View style={{flexDirection: 'column'}}>
               <Text style={styles.favourite}>Add to Favourite</Text>
-              <TouchableOpacity>
-                <FastImage
+              <TouchableOpacity onPress={handleToggleFavorite}>
+                <Image
                   source={require('../assets/Like.png')}
-                  style={styles.likeIcon}
+                  style={[styles.likeIcon, { tintColor: isFavorite ? 'yellow' : 'gray' },]}
                 />
               </TouchableOpacity>
             </View>
@@ -151,6 +174,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginLeft: 'auto',
+    resizeMode: 'contain',
   },
   favourite: {
     color: '#FFFFFF',

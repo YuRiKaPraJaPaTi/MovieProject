@@ -40,6 +40,8 @@ api.interceptors.response.use(
   } else if (endpoint === "search") {
     url = `search/movie`;
     // params = false
+  } else if (endpoint == "account") {
+    url = `account/{account_id}/favourites/movies`
   }
   try {
     const { data } = await api.get(url, {
