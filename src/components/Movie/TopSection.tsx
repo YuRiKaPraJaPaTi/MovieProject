@@ -1,8 +1,9 @@
-import React, {  } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, Dimensions, FlatList, ToastAndroid, Alert, TouchableOpacity } from 'react-native';
 import { formatRuntime } from '../../utils/timeUtils';
 import ThreeButtonsRow from './ThreeButtonRow';
 import { Credits } from '../../types/types';
+import { addToWatchlist } from '../../TMDBapi/addToWactclist';
 
 type  Props = {
     movie: any;
@@ -12,6 +13,25 @@ type  Props = {
 const TopSection = ({movie, credits}:Props) => {
   const safeRating = Math.min(Math.max(movie?.rating, 0), 10);
   const percentage = safeRating * 10; 
+
+  const [watch, setWatch] = useState(false)
+
+    const handleToggleWatchlist = async () => {
+      const newStatus = !watch;
+      try {
+        const result = await addToWatchlist(newStatus, movie.id);
+        if (result.success) {
+          setWatch(newStatus);
+          ToastAndroid.show(
+            newStatus ? 'Added to wATCHLIST!' : 'Removed from watchlist!', 
+            ToastAndroid.SHORT);
+        } else {
+          Alert.alert('Failed, Try again');
+        }
+      } catch (err) {
+        Alert.alert('Error', 'Could not update watchlist status.');
+      }
+    };
 
   return (
   <View>
@@ -52,7 +72,10 @@ const TopSection = ({movie, credits}:Props) => {
       <View style={styles.bottomDetails}>
           <Text style={styles.bottomText}><Image source={require('../../assets/Duration.png')}/>  {formatRuntime(movie?.duration)}</Text>
           <Text style={styles.bottomText}><Image source={require('../../assets/Date.png')}/>  {movie?.releaseDate}</Text>
-          <Text style={styles.bottomText}><Image source={require('../../assets/Eye.png')}/>  Not Watched</Text>
+          <TouchableOpacity onPress={handleToggleWatchlist}>
+            <Text style={styles.bottomText}><Image source={require('../../assets/Eye.png')}/> {watch ? ' Watched' : ' Not Watched'}</Text>
+          </TouchableOpacity>
+          
       </View>
     </View>
 
