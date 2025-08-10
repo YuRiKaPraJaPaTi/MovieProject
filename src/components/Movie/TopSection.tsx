@@ -10,6 +10,8 @@ type  Props = {
 }
 
 const TopSection = ({movie, credits}:Props) => {
+  const safeRating = Math.min(Math.max(movie?.rating, 0), 10);
+  const percentage = safeRating * 10; 
 
   return (
   <View>
@@ -55,8 +57,6 @@ const TopSection = ({movie, credits}:Props) => {
     </View>
 
     <ThreeButtonsRow />
-      
-      <Text style={styles.rating}>Rating: {movie?.rating.toFixed(1)}</Text>
 
       <Text style={styles.overview}>{movie?.overview}</Text>
 
@@ -74,6 +74,13 @@ const TopSection = ({movie, credits}:Props) => {
           </View>
         )}
       />
+
+      <View style={styles.ratingContainer}>
+      <Text style={styles.rating}>Rating: {movie?.rating.toFixed(1)}/10</Text>
+      <View style={styles.barBackground}>
+        <View style={[styles.barFill, { width: `${percentage}%` }]} />
+      </View>
+    </View>
 
     </View>
   
@@ -149,7 +156,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF75',
   },
   rating: { 
-    fontSize: 16, 
+    fontSize: 18, 
+    fontWeight: 'bold',
     marginVertical: 10,
     color: '#FFFFFF',
   },
@@ -167,6 +175,7 @@ const styles = StyleSheet.create({
   },
   overview: { 
     fontSize: 16, 
+    fontWeight: 400,
     color: '#FFFFFF',
     marginVertical: 10 
   },
@@ -186,7 +195,20 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30, 
     backgroundColor: '#FFFFFF60', 
-  }
+  },
+  ratingContainer: {
+    marginVertical: 10,
+  },
+  barBackground: {
+    height: 10,
+    backgroundColor: '#FFFFFF60',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  barFill: {
+    height: '100%',
+    backgroundColor: '#FFCA45',
+  },
 });
 
 export default TopSection;
