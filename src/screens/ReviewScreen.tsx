@@ -1,24 +1,19 @@
 import { Alert, Image, StyleSheet, Text, TextInput,TouchableOpacity,View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRoute, RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/types';
+import { HomeTabScreenProps, RootStackParamList } from '../navigation/types';
 import MyButton from '../components/MyButton';
 import RatingRow from '../components/RatingRow';
 import { addReview } from '../firebase/ReviewService';
-import { useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
-import api from '../TMDBapi/axiosInstance';
 import { addToFavourite } from '../TMDBapi/addFavourite';
 import { ToastAndroid } from 'react-native';
 
-
-
 type ReviewScreenRouteProp = RouteProp<RootStackParamList, 'Review'>;
 
-
-const ReviewScreen = () => {
+const ReviewScreen = ({ navigation }: HomeTabScreenProps<'Wishlist'>) => {
   const route = useRoute<ReviewScreenRouteProp>();
-  const navigation = useNavigation();
+  
 
   const { movieId, title, image } = route.params;
   const [comment, setComment] = useState('');
@@ -37,6 +32,9 @@ const ReviewScreen = () => {
         ToastAndroid.show(
           newStatus ? 'Added to favourites!' : 'Removed from favourites!', 
           ToastAndroid.SHORT);
+          setTimeout(() => {
+            navigation.navigate('Tabs', { screen: 'Wishlist' });
+          }, 1000); 
       } else {
         Alert.alert('Failed, Try again');
       }

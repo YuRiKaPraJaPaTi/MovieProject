@@ -1,16 +1,14 @@
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { FlatList, StyleSheet, View } from 'react-native'
+import React, { useCallback, useState } from 'react'
 import { fetchMovies } from '../../TMDBapi/TMDB';
-import FastImage from 'react-native-fast-image';
-import { HomeTabScreenProps } from '../../navigation/types';
 import MovieCard from '../../components/Home/MovieCard';
+import { useFocusEffect } from '@react-navigation/native';
 
 const WishlistScreen = () => {
   const [favourite, setFavourite] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchFavourite = async () => {
+  const fetchFavourite = async () => {
       setLoading(true);
       try {
         const favouriteMovies = await fetchMovies("favorite")
@@ -22,8 +20,12 @@ const WishlistScreen = () => {
       
       setLoading(false)
     }
-    fetchFavourite();
-  }, [])
+
+    useFocusEffect(
+    useCallback(() => {
+      fetchFavourite();
+    }, [])
+  );
   return (
     <View style={{flex:1, padding: 10, backgroundColor:'#002335'}}>
     <FlatList
