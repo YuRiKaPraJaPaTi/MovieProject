@@ -101,7 +101,9 @@ const ReviewScreen = ({ navigation }: HomeTabScreenProps<'Wishlist'>) => {
         onChangeText={setComment}
       />
 
-      <MyButton label='Publish' onPress={handleSubmitReview} />
+      <View style={{flexDirection: 'row',justifyContent: 'flex-end'}}>
+        <MyButton label='Publish' width={100} onPress={handleSubmitReview} />
+      </View>
     </View>
   )
 }
