@@ -7,20 +7,13 @@ import MyButton from '../MyButton';
 import ReviewItemDisplay from './ReviewItemDisplay';
 
 type ReviewScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
+import { Review } from '../../types/types';
 
 interface ReviewSectionProps {
   reviews: Review[];
   movieId: string;
   title: string;
   image: any;
-}
-
-interface Review {
-  id: string;
-  author: string;
-  comment: string;
-  rating: number;
-  source: 'tmdb' | 'firebase';
 }
 
 const ReviewSection = ({reviews, movieId, title, image}: ReviewSectionProps) => {

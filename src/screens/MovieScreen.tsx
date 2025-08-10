@@ -6,34 +6,17 @@ import TopSection from '../components/Movie/TopSection';
 import ReviewSection from '../components/Movie/ReviewSection';
 import { listenToFirestoreReviews } from '../firebase/ReviewService';
 import { fetchMovieCredits, fetchMovieDetails, fetchMovieReviews } from '../TMDBapi/TMDB';
+import { Credits, Movie, Review } from '../types/types';
+
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
 
-export interface CastMember {
-  id: number;
-  name: string;
-  character: string;
-  profile_path: string;
-}
-
-export interface Credits {
-  director: string | null;
-  cast: CastMember[];
-}
-
-export interface Review {
-  id: string;
-  author: string;
-  comment: string;
-  rating: number;
-  source: 'tmdb' | 'firebase';
-}
 
 const MovieScreen = () => {
   const route = useRoute<MovieScreenRouteProp>();
   const { movieId, title, image } = route.params;
 
-  const [movie, setMovie] = useState<any>(null);
+  const [movie, setMovie] = useState<Movie | null>(null);
   const [credits, setCredits] = useState<Credits | undefined>(undefined);
   const [tmdbReviews, setTmdbReviews] = useState<Review[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);

@@ -5,19 +5,11 @@ import { fetchFromAPI } from '../../TMDBapi/axiosInstance';
 import MovieSection from '../../components/Home/MovieSection';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDebounce } from '../../hook/useDebounce';
-
-
-export interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  vote_average: number;
-  release_date: string;
-}
+import { Movie } from '../../types/types';
 
 const SearchScreen = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<Movie[]>([]);
+  const [results, setResults] = useState<any[]>([]);
   const debouncedQuery = useDebounce(query, 500);
   const [loading, setLoading] = useState(false);
 

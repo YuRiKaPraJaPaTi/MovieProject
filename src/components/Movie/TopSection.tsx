@@ -2,7 +2,7 @@ import React, {  } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, FlatList } from 'react-native';
 import { formatRuntime } from '../../utils/timeUtils';
 import ThreeButtonsRow from './ThreeButtonRow';
-import { Credits } from '../../screens/MovieScreen';
+import { Credits } from '../../types/types';
 
 type  Props = {
     movie: any;

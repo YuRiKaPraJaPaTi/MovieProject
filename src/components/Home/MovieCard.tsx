@@ -47,7 +47,7 @@ const MovieCard = ({ id, image, title, rating, releaseDate, section }: MovieCard
               </View>
             )}
             
-            {section === 'Top Rated' && rating !== undefined && (
+            {(section === 'Top Rated' || section === 'Search') && rating !== undefined && (
                   <Text style={styles.metaText}>⭐ {rating.toFixed(1)}</Text>
             )}
             </TouchableOpacity>  
