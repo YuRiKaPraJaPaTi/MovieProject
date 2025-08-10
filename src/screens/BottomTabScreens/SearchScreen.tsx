@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDebounce } from '../../hook/useDebounce';
 
 
-interface Movie {
+export interface Movie {
   id: number;
   title: string;
   poster_path: string;

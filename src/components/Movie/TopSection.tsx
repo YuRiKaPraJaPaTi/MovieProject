@@ -1,49 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, ActivityIndicator, FlatList } from 'react-native';
-import { fetchMovieCredits, fetchMovieDetails } from '../../TMDBapi/TMDB';
+import React, {  } from 'react';
+import { View, Text, Image, StyleSheet, Dimensions, FlatList } from 'react-native';
 import { formatRuntime } from '../../utils/timeUtils';
-import MyButton from '../MyButton';
 import ThreeButtonsRow from './ThreeButtonRow';
+import { Credits } from '../../screens/MovieScreen';
 
 type  Props = {
-    movieId: string;
+    movie: any;
+    credits: Credits;
 }
 
-interface CastMember {
-  id: number;
-  name: string;
-  character: string;
-  profile_path: string;
-}
+const TopSection = ({movie, credits}:Props) => {
 
-interface Credits {
-  director: string | null;
-  cast: CastMember[];
-}
-
-const TopSection = ({movieId}:Props) => {
-  const [movie, setMovie] = useState<any>(null);
-  const [credits, setCredits] = useState<Credits | undefined>(undefined);
-
-  const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-      const fetchData = async () => {
-        const movieDetails = await fetchMovieDetails(movieId);
-        const creditDetails = await fetchMovieCredits(movieId);
-        
-        setMovie(movieDetails);
-        setCredits(creditDetails);
-        setLoading(false);
-      };
-  
-      fetchData();
-    }, [movieId]);
-  
-    if (loading) {
-      return <ActivityIndicator size="large" color="#000" style={{ marginTop: 100 }} />;
-    }
-  
   return (
   <View>
     <View style={styles.container}>
@@ -104,15 +71,12 @@ const TopSection = ({movieId}:Props) => {
               source={{ uri: `https://image.tmdb.org/t/p/w200${item.profile_path}` }}
               style={styles.profilePic}
           />
-          
-        </View>
-      )}
-    />
+          </View>
+        )}
+      />
 
     </View>
   
-
-    
   );
 };
 
