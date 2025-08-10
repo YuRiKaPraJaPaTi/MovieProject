@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, ActivityIndicator, FlatList } from 'react-native';
 import { fetchMovieCredits, fetchMovieDetails } from '../../TMDBapi/TMDB';
 import { formatRuntime } from '../../utils/timeUtils';
+import MyButton from '../MyButton';
+import ThreeButtonsRow from './ThreeButtonRow';
 
 type  Props = {
     movieId: string;
@@ -85,6 +87,7 @@ const TopSection = ({movieId}:Props) => {
       </View>
     </View>
 
+    <ThreeButtonsRow />
       
       <Text style={styles.rating}>Rating: {movie?.rating.toFixed(1)}</Text>
 

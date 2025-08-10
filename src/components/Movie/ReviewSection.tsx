@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { fetchMovieReviews } from '../../TMDBapi/TMDB';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -79,11 +79,19 @@ const ReviewSection = ({movieId, title, image}: ReviewSectionProps) => {
   };
 }, [movieId]);
 
+// inside ReviewSection
+if (loading) {
+  return <ActivityIndicator size="large" color="white" style={{ marginVertical: 20 }} />;
+}
+
+
   return (
     <View>
       <Text style={styles.sectionTitle}>Reviews ({reviews.length})</Text>
 
-      <MyButton label='Write a Review' onPress={() => navigation.navigate('Review', {movieId, title, image})}/>
+      <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+        <MyButton label='Write a Review' width={150} onPress={() => navigation.navigate('Review', {movieId, title, image})}/>
+      </View>
 
       {reviews.length > 0 ? (
         reviews.map((item) => (
