@@ -3,6 +3,7 @@ import React, { useCallback } from 'react'
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useAuth } from '../../context/AuthContext';
+import MovieSection from '../../components/Home/MovieSection';
 
 const ProfileScreen = () => {
   const {user} = useAuth()
@@ -59,6 +60,9 @@ const ProfileScreen = () => {
 
         </View>      
       </View>
+
+    <MovieSection title='Favorites' endpoint='favorite'/>
+
     </View>
   )
 }
