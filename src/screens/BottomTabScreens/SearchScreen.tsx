@@ -1,9 +1,10 @@
 import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MovieCard from '../../components/Home/MovieCard';
 import { fetchFromAPI } from '../../TMDBapi/axiosInstance';
 import MovieSection from '../../components/Home/MovieSection';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useDebounce } from '../../hook/useDebounce';
 
 
 interface Movie {
@@ -17,17 +18,30 @@ interface Movie {
 const SearchScreen = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Movie[]>([]);
+  const debouncedQuery = useDebounce(query, 500);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
-      const data = await fetchFromAPI("search", { query });
-      if (data?.results) setResults(data.results);
-  };
-
-  const handleChangeText = (text: string) => {
-    setQuery(text);
-    if (text.trim() === '') {
-      setResults([]); 
+  useEffect(() => {
+    if (debouncedQuery.trim() === '') {
+      setResults([]);
+      setLoading(false);
+      return;
     }
+
+    const fetchResults = async () => {
+      setLoading(true);
+      const data = await fetchFromAPI('search', { query: debouncedQuery });
+      if (data?.results) setResults(data.results);
+      else setResults([]);
+      setLoading(false);
+    };
+
+    fetchResults();
+  }, [debouncedQuery]);
+
+  const clearSearch = () => {
+    setQuery('');
+    setResults([]);
   };
 
   return (
@@ -37,14 +51,27 @@ const SearchScreen = () => {
           placeholder='Search movie...'
           style={styles.searchBar}
           value={query}
-          onChangeText={handleChangeText}
-          onSubmitEditing={handleSearch}
+          onChangeText={setQuery}
+          returnKeyType="search"
         />
-        <Icon name="search" size={24} color="#FFFFFF90" style={styles.searchIcon} onPress={handleSearch}/> 
+        {query.length > 0 ? (
+          <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
+            <Icon name="times-circle" size={24} color="#FFFFFF90" />
+          </TouchableOpacity>
+        ) : (
+          <Icon name="search" size={24} color="#FFFFFF90" style={styles.searchIcon}/> 
+        )}
+        
       </View>
-      <ScrollView>
-        {results.length > 0 && (
-          <FlatList
+      
+      {debouncedQuery.trim().length > 0 ? (
+        <>
+          {loading ? (
+            <Text style={styles.statusText}>Loading...</Text>
+          ) : results.length === 0 ? (
+            <Text style={styles.statusText}>No Results Found</Text>
+          ) : (
+            <FlatList
             data={results}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
@@ -57,14 +84,17 @@ const SearchScreen = () => {
                 section="Search" 
               />
             )}
-            horizontal
+            numColumns={3} 
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.resultsContainer} 
             ListHeaderComponent={<Text style={styles.resultsTitle}>Results</Text>}
           />
-        )}
+          )}
+        </>
+      ) : (
 
-        
+      <ScrollView>
+
         <MovieSection title="Trending" endpoint="trending" />
 
         <View style={styles.browse}>
@@ -75,6 +105,7 @@ const SearchScreen = () => {
         
         <MovieSection title='Upcoming' endpoint='upcoming'/>
       </ScrollView>
+        )}
     </View>
 
     
@@ -90,7 +121,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   searchContainer: {
-    
+    position: 'relative',
   },
   searchBar: {
     fontSize: 20,
@@ -105,6 +136,11 @@ const styles = StyleSheet.create({
     top: 10,
     right: 20,
   },
+   clearButton: {
+    position: 'absolute',
+    right: 20,
+    top: 10,
+  },
   resultsTitle: {
     color: 'white',
     fontSize: 24,
@@ -113,8 +149,14 @@ const styles = StyleSheet.create({
   },
    resultsContainer: {
     paddingBottom: 20, 
+    
   },
-
+  statusText: {
+    color: '#fff',
+    fontSize: 18,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
   browse: {
     backgroundColor: "#FFFFFF80",
     padding: 20,

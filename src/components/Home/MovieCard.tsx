@@ -1,12 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 
+const screenWidth = Dimensions.get('window').width;
+const cardMargin = 12;
+const numColumns = 3;
+
+const cardWidth = (screenWidth - 40 - cardMargin * (numColumns - 1)) / numColumns;
+
 interface MovieCardProps {
-      image: any;
+      image: string;
       id: string;
       title: string;
       rating?: number;
@@ -19,10 +25,14 @@ type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, '
 const MovieCard = ({ id, image, title, rating, releaseDate, section }: MovieCardProps) => {
    const navigation = useNavigation<MovieScreenNavigationProp>();
   // console.log("image is:", image)
+  
       return (
       <View style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: id, title: title, image: image })}>
-            <FastImage source={{uri: image}} style={styles.image} />
+            <FastImage 
+              source={{uri: image}}
+              style={styles.image} 
+            />
 
             {section !== 'Favourite' && (
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
@@ -49,12 +59,13 @@ export default MovieCard;
 
 const styles = StyleSheet.create({
   card: {
-    marginRight: 12,
-    width: 120,
+    marginRight: cardMargin,
+    width: cardWidth,
+    marginBottom: 8,
   },
   image: {
-    width: 120,
-    height: 180,
+    width: cardWidth,
+    height: cardWidth*1.5,
     borderRadius: 8,
   },
   title: {
