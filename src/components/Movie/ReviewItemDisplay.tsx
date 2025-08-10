@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import StarRatingDisplay from './StarRatingDisplay';
 
 interface Review {
   id: string;
@@ -20,7 +21,7 @@ const ReviewItemDisplay = ({ review }: ReviewItemProps) => {
             <Text style={{color: '#FFCA45'}}>{review.author}</Text>
 
       </Text>
-      <Text style={styles.reviewRating}>Rating: {review.rating}</Text>
+      <StarRatingDisplay rating={review.rating} />
       <Text style={styles.reviewContent}>{review.comment}</Text>
     </View>
   );
