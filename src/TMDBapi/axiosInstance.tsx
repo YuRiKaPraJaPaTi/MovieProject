@@ -40,8 +40,10 @@ api.interceptors.response.use(
   } else if (endpoint === "search") {
     url = `search/movie`;
     // params = false
-  } else if (endpoint == "account") {
-    url = `account/{account_id}/favourites/movies`
+  } else if (endpoint == "favorite") {
+    url = `account/22105876//favorite/movies`
+    // https://api.themoviedb.org/3/account/{account_id}/favorite/movies
+
   }
   try {
     const { data } = await api.get(url, {
