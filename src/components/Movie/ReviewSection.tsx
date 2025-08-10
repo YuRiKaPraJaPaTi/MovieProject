@@ -7,6 +7,7 @@ import { RootStackParamList } from '../../navigation/types';
 import MyButton from '../MyButton';
 import { collection, getDocs, query, where } from '@react-native-firebase/firestore';
 import { fetchFirestoreReviews, listenToFirestoreReviews } from '../../firebase/ReviewService';
+import ReviewItemDisplay from './ReviewItemDisplay';
 
 type ReviewScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
 
@@ -42,7 +43,7 @@ const ReviewSection = ({movieId, title, image}: ReviewSectionProps) => {
         id: item.id,
         author: item.author,
         comment: item.content,
-        rating: item.rating ?? 0,
+        rating: item.author_details.rating,
         source: 'tmdb' as const,
       }));
       setTmdbReviews(formattedTmdb);
@@ -86,11 +87,7 @@ const ReviewSection = ({movieId, title, image}: ReviewSectionProps) => {
 
       {reviews.length > 0 ? (
         reviews.map((item) => (
-          <View key={item.id} style={styles.reviewBox}>
-            <Text style={styles.reviewer}>{item.author}</Text>
-            <Text style={styles.reviewRating}>Rating: {item.rating}</Text>
-            <Text style={styles.reviewContent}>{item.comment}</Text>
-          </View>
+          <ReviewItemDisplay key={item.id} review={item} />
         ))
       ) : (
         <Text style={{color: 'white'}}>No reviews available.</Text>
@@ -106,27 +103,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginVertical: 10,
   },
-  reviewBox: {
-    marginBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#FFFFFF',
-    paddingBottom: 10,
-  },
-  reviewer: {
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  reviewContent: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  reviewRating: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
+
 });
 
 export default ReviewSection;

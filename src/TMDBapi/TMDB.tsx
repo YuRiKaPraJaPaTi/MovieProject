@@ -57,7 +57,7 @@ export const fetchMovieCredits = async (movieId: string) => {
 export const fetchMovieReviews = async (movieId: string, page: number = 1) => {
       const data = await fetchFromAPI(`${movieId}/reviews`, { page });
       if (data) {
-            return data?.results || [];
+            return data.results || [];
       } 
 }
 
