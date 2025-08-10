@@ -46,9 +46,10 @@ export const fetchMovieCredits = async (movieId: string) => {
       const data  = await fetchFromAPI(`${movieId}/credits`)
       if (data) {
             const director = data.crew.find((person: any) => person.job === 'Director')?.name;
-            const cast = data.cast.slice(0, 5).map((actor: any) => actor.name);
-            // console.log(director)
-            // console.log(cast)
+            const cast = data.cast.slice(0, 10).map((actor: any) => ({
+                  id: actor.id,
+                  profile_path: actor.profile_path
+            }))
             return { director, cast };
       } 
 };

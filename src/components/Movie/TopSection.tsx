@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions, ActivityIndicator, FlatList } from 'react-native';
 import { fetchMovieCredits, fetchMovieDetails } from '../../TMDBapi/TMDB';
+import { formatRuntime } from '../../utils/timeUtils';
 
 type  Props = {
     movieId: string;
 }
 
+interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string;
+}
+
 interface Credits {
   director: string | null;
-  cast: string[];
+  cast: CastMember[];
 }
 
 const TopSection = ({movieId}:Props) => {
@@ -71,7 +79,7 @@ const TopSection = ({movieId}:Props) => {
       </View>
 
       <View style={styles.bottomDetails}>
-          <Text style={styles.bottomText}><Image source={require('../../assets/Duration.png')}/>  {movie?.duration} min</Text>
+          <Text style={styles.bottomText}><Image source={require('../../assets/Duration.png')}/>  {formatRuntime(movie?.duration)}</Text>
           <Text style={styles.bottomText}><Image source={require('../../assets/Date.png')}/>  {movie?.releaseDate}</Text>
           <Text style={styles.bottomText}><Image source={require('../../assets/Eye.png')}/>  Not Watched</Text>
       </View>
@@ -83,7 +91,20 @@ const TopSection = ({movieId}:Props) => {
       <Text style={styles.overview}>{movie?.overview}</Text>
 
       <Text style={styles.castTitle}>Cast</Text>
-      <Text style={{color: '#FFFFFF',}}>{credits!.cast.join(', ')}</Text>
+      <FlatList
+        horizontal
+        data={credits!.cast}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.castItem}>
+            <Image
+              source={{ uri: `https://image.tmdb.org/t/p/w200${item.profile_path}` }}
+              style={styles.profilePic}
+          />
+          
+        </View>
+      )}
+    />
 
     </View>
   
@@ -186,8 +207,19 @@ const styles = StyleSheet.create({
     fontSize: 18, 
     fontWeight: 'bold', 
     color: '#FFFFFF',
-    marginVertical: 10 
+    marginVertical: 10,
   },
+   castItem: {
+    marginRight: 12,
+    alignItems: 'center',
+    width: 70,
+  },
+  profilePic: {
+    width: 60,
+    height: 60,
+    borderRadius: 30, 
+    backgroundColor: '#FFFFFF60', 
+  }
 });
 
 export default TopSection;
