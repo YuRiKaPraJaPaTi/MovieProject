@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
+
+const screenWidth = Dimensions.get('window').width;
+const cardMargin = 12;
+const numColumns = 3;
+
+const cardWidth = (screenWidth - 40 - cardMargin * (numColumns - 1)) / numColumns;
 
 interface MovieCardProps {
       image: string;
@@ -53,13 +59,13 @@ export default MovieCard;
 
 const styles = StyleSheet.create({
   card: {
-    marginRight: 12,
-    width: 120,
+    marginRight: cardMargin,
+    width: cardWidth,
     marginBottom: 8,
   },
   image: {
-    width: 120,
-    height: 180,
+    width: cardWidth,
+    height: cardWidth*1.5,
     borderRadius: 8,
   },
   title: {
