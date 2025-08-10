@@ -21,7 +21,7 @@ const TopSection = ({movie, credits}:Props) => {
 
       <View style={styles.topImageContainer}>
         <Image 
-          source={{ uri: movie?.image }}
+          source={{ uri: movie?.backdropImage}}
           style={styles.imageLeft}
         />
       </View>

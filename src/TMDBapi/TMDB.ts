@@ -1,4 +1,4 @@
-import  { fetchFromAPI } from './axiosInstance';
+import { fetchFromAPI } from "./helperAPI";
 
 
 // fetch movie from category
