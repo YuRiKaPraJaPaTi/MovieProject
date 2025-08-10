@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { fetchMovies } from '../../TMDBapi/TMDB';
 import FastImage from 'react-native-fast-image';
 import { HomeTabScreenProps } from '../../navigation/types';
+import MovieCard from '../../components/Home/MovieCard';
 
-const WishlistScreen = ({navigation}: HomeTabScreenProps<'Wishlist'>) => {
+const WishlistScreen = () => {
   const [favourite, setFavourite] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,15 +30,13 @@ const WishlistScreen = ({navigation}: HomeTabScreenProps<'Wishlist'>) => {
       data={favourite}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <TouchableOpacity style={styles.card}  onPress={() => navigation.navigate('Movie', { movieId: item.id, title: item.title, image: item.image })}>
-          <FastImage
-            source={{ uri: item.image }}
-            style={styles.poster}
-          />
-        </TouchableOpacity>
+      
+          <MovieCard image={item.image} id={item.id} title={item.title} section='Favourite' />
+      
       )}
       numColumns={3}
       columnWrapperStyle={styles.row}
+      
     />
 
     </View>
@@ -48,16 +47,9 @@ export default WishlistScreen
 
 const styles = StyleSheet.create({
    row: {
-    justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: 16,
   },
   card: {
-    flex: 1 / 3, 
     alignItems: "center",
-  },
-  poster: {
-    width: 100,
-    height: 150,
-    borderRadius: 8,
   },
 })

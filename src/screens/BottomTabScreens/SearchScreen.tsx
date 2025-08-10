@@ -49,6 +49,7 @@ const SearchScreen = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <MovieCard
+                id={item.id.toString()}
                 image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                 title={item.title}
                 rating={item.vote_average}

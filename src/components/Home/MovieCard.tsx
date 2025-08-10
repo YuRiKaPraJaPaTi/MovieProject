@@ -1,24 +1,33 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/types';
 
 interface MovieCardProps {
       image: any;
+      id: string;
       title: string;
       rating?: number;
       releaseDate?: string;
-      section: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Search'
+      section?: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Search' | 'Favourite'
 }
 
-const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProps) => {
+type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
+
+const MovieCard = ({ id, image, title, rating, releaseDate, section }: MovieCardProps) => {
+   const navigation = useNavigation<MovieScreenNavigationProp>();
   // console.log("image is:", image)
       return (
       <View style={styles.card}>
+        <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: id, title: title, image: image })}>
             <FastImage source={{uri: image}} style={styles.image} />
-            
-            <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
 
-             
+            {section !== 'Favourite' && (
+                <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
+            )}
+            
             {section === 'Upcoming' && releaseDate && (
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'space-between' }}>
                   <Text style={styles.metaText}>📅 {releaseDate}</Text>
@@ -28,13 +37,10 @@ const MovieCard = ({ image, title, rating, releaseDate, section }: MovieCardProp
               </View>
             )}
             
-    
-    
-
             {section === 'Top Rated' && rating !== undefined && (
                   <Text style={styles.metaText}>⭐ {rating.toFixed(1)}</Text>
             )}
-            
+            </TouchableOpacity>  
       </View>
       );
 };

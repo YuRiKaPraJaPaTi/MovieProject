@@ -3,11 +3,11 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import MovieCard from './MovieCard';
 import { fetchMovies } from '../../TMDBapi/TMDB';
 import Pagination from './Pagination';
-import { useNavigation } from '@react-navigation/native';
+
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 
-type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
+
 
 
 interface MovieItem {
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const MovieSection = ({ title, endpoint }: Props) => {
-  const navigation = useNavigation<MovieScreenNavigationProp>();
+ 
 
   let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' = 'Now Playing';
   if (title === 'Upcoming') sectionType = 'Upcoming';
@@ -73,16 +73,17 @@ const MovieSection = ({ title, endpoint }: Props) => {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: item.id, title: item.title, image:item.image })}>
+        
 
           <MovieCard 
             image={item.image} 
+            id={item.id}
             title={item.title} 
             rating={item.rating}
             releaseDate={item.releaseDate}
             section={sectionType}
           />
-          </TouchableOpacity>
+        
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
