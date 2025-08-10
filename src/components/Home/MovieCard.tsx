@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 
 interface MovieCardProps {
-      image: any;
+      image: string;
       id: string;
       title: string;
       rating?: number;
@@ -19,10 +19,14 @@ type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, '
 const MovieCard = ({ id, image, title, rating, releaseDate, section }: MovieCardProps) => {
    const navigation = useNavigation<MovieScreenNavigationProp>();
   // console.log("image is:", image)
+  
       return (
       <View style={styles.card}>
         <TouchableOpacity onPress={() => navigation.navigate('Movie', { movieId: id, title: title, image: image })}>
-            <FastImage source={{uri: image}} style={styles.image} />
+            <FastImage 
+              source={{uri: image}}
+              style={styles.image} 
+            />
 
             {section !== 'Favourite' && (
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
@@ -51,6 +55,7 @@ const styles = StyleSheet.create({
   card: {
     marginRight: 12,
     width: 120,
+    marginBottom: 8,
   },
   image: {
     width: 120,

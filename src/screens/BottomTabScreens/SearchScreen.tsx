@@ -21,18 +21,6 @@ const SearchScreen = () => {
   const debouncedQuery = useDebounce(query, 500);
   const [loading, setLoading] = useState(false);
 
-  // const handleSearch = async () => {
-  //     const data = await fetchFromAPI("search", { query });
-  //     if (data?.results) setResults(data.results);
-  // };
-
-  // const handleChangeText = (text: string) => {
-  //   setQuery(text);
-  //   if (text.trim() === '') {
-  //     setResults([]); 
-  //   }
-  // };
-
   useEffect(() => {
     if (debouncedQuery.trim() === '') {
       setResults([]);
@@ -66,21 +54,24 @@ const SearchScreen = () => {
           onChangeText={setQuery}
           returnKeyType="search"
         />
-        {query.length > 0 && (
+        {query.length > 0 ? (
           <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
-            <Icon name="times-circle" size={20} color="#999" />
+            <Icon name="times-circle" size={24} color="#FFFFFF90" />
           </TouchableOpacity>
+        ) : (
+          <Icon name="search" size={24} color="#FFFFFF90" style={styles.searchIcon}/> 
         )}
-        <Icon name="search" size={24} color="#FFFFFF90" style={styles.searchIcon}/> 
+        
       </View>
-      {loading && <Text style={styles.statusText}>Loading...</Text>}
-
-      {!loading && debouncedQuery.length > 0 && results.length === 0 && (
-        <Text style={styles.statusText}>No results found</Text>
-      )}
-      <ScrollView>
-        {results.length > 0 && (
-          <FlatList
+      
+      {debouncedQuery.trim().length > 0 ? (
+        <>
+          {loading ? (
+            <Text style={styles.statusText}>Loading...</Text>
+          ) : results.length === 0 ? (
+            <Text style={styles.statusText}>No Results Found</Text>
+          ) : (
+            <FlatList
             data={results}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
@@ -93,14 +84,17 @@ const SearchScreen = () => {
                 section="Search" 
               />
             )}
-            horizontal
+            numColumns={3} 
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.resultsContainer} 
             ListHeaderComponent={<Text style={styles.resultsTitle}>Results</Text>}
           />
-        )}
+          )}
+        </>
+      ) : (
 
-        
+      <ScrollView>
+
         <MovieSection title="Trending" endpoint="trending" />
 
         <View style={styles.browse}>
@@ -111,6 +105,7 @@ const SearchScreen = () => {
         
         <MovieSection title='Upcoming' endpoint='upcoming'/>
       </ScrollView>
+        )}
     </View>
 
     
@@ -143,8 +138,8 @@ const styles = StyleSheet.create({
   },
    clearButton: {
     position: 'absolute',
-    right: 40,
-    top: 13,
+    right: 20,
+    top: 10,
   },
   resultsTitle: {
     color: 'white',
@@ -154,6 +149,7 @@ const styles = StyleSheet.create({
   },
    resultsContainer: {
     paddingBottom: 20, 
+    
   },
   statusText: {
     color: '#fff',
