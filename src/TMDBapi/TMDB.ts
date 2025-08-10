@@ -1,4 +1,4 @@
-import  { fetchFromAPI } from './axiosInstance';
+import { fetchFromAPI } from "./helperAPI";
 
 
 // fetch movie from category
@@ -26,6 +26,7 @@ export const fetchMovieDetails = async (movieId: string) => {
       const data = await fetchFromAPI(`/${movieId}`)
       if (data) {
       return {
+            id: data.id,
             title: data.title,
             releaseDate: data.release_date,
             overview: data.overview,

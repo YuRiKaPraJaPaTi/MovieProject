@@ -6,17 +6,18 @@ import Pagination from './Pagination';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
+import { Movie } from '../../types/types';
 
 
 
 
-interface MovieItem {
-  id: string;
-  title: string;
-  image: any;
-  rating?: number;
-  releaseDate?: string;
-}
+// interface MovieItem {
+//   id: string;
+//   title: string;
+//   image: any;
+//   rating?: number;
+//   releaseDate?: string;
+// }
 
 interface Props {
   title: string;
@@ -31,7 +32,7 @@ const MovieSection = ({ title, endpoint }: Props) => {
   if (title === 'Top Rated') sectionType = 'Top Rated';
   if (title === 'Trending') sectionType = 'Trending';
 
-  const [data, setData] = useState<MovieItem[]>([]);
+  const [data, setData] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,13 +72,13 @@ const MovieSection = ({ title, endpoint }: Props) => {
 
       <FlatList
         data={data}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
         
 
           <MovieCard 
             image={item.image} 
-            id={item.id}
+            id={item.id.toString()}
             title={item.title} 
             rating={item.rating}
             releaseDate={item.releaseDate}

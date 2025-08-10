@@ -1,15 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import StarRatingDisplay from './StarRatingDisplay';
+import { Review } from '../../types/types';
 
-interface Review {
-  id: string;
-  author: string;
-  comment: string;
-  rating: number;
-}
-
-interface ReviewItemProps {
+type ReviewItemProps = {
   review: Review;
 }
 
