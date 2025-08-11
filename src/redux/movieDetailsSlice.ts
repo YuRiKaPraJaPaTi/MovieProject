@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Credits, MovieDetails, Review } from '../types/types';
 
-interface MovieDetailsState {
-  movie: MovieDetails | null;
+interface MovieState {
+  details: MovieDetails | null;
   credits: Credits | null;
   tmdbReviews: Review[];
   firebaseReviews: Review[];
@@ -10,12 +10,22 @@ interface MovieDetailsState {
   error: string | null;
 }
 
+interface MovieDetailsState {
+  movies: {
+      [movieId: string]: MovieState
+  }
+}
+
 const initialState: MovieDetailsState = {
-  movie: null,
-  loading: false,
+  movies:{}
+};
+
+const defaultMovieState: MovieState = {
+  details: null,
   credits: null,
   tmdbReviews: [],
   firebaseReviews: [],
+  loading: false,
   error: null,
 };
 
@@ -23,25 +33,49 @@ const movieDetailsSlice = createSlice({
   name: 'movieDetails',
   initialState,
   reducers: {
-    setLoading(state, action: PayloadAction<boolean>) {
-      state.loading = action.payload;
+    setLoading(state, action: PayloadAction<{movieId: string, loading: boolean, }>) {
+      const {movieId, loading} = action.payload
+      if (!state.movies[movieId]) {
+            state.movies[movieId] = {...defaultMovieState}
+      }
+      state.movies[movieId].loading = loading;
     },
-    setDetails(state, action: PayloadAction<MovieDetails | null> ) {
-      state.movie = action.payload;
+    setDetails(state, action: PayloadAction<{ movieId: string; details: MovieDetails | null }> ) {
+      const { movieId, details } = action.payload;
+      if (!state.movies[movieId]) {
+        state.movies[movieId] =  {...defaultMovieState}
+      }
+      state.movies[movieId].details = details;
     },
-    setCredits(state, action: PayloadAction<Credits | null>) {
-      state.credits = action.payload;
+    setCredits(state, action: PayloadAction<{ movieId: string; credits: Credits | null }>) {
+      const { movieId, credits } = action.payload;
+      if (!state.movies[movieId]) {
+        state.movies[movieId] =  {...defaultMovieState}
+      }
+      state.movies[movieId].credits = credits;
     },
-    setTmdbReviews(state, action: PayloadAction<Review[]>) {
-      state.tmdbReviews = action.payload;
+    setTmdbReviews(state, action: PayloadAction<{ movieId: string; reviews: Review[] }>) {
+      const { movieId, reviews } = action.payload;
+      if (!state.movies[movieId]) {
+        state.movies[movieId] =  {...defaultMovieState}
+      }
+      state.movies[movieId].tmdbReviews = reviews;
     },
-    setFirebaseReviews(state, action: PayloadAction<Review[]>) {
-      state.firebaseReviews = action.payload;
+    setFirebaseReviews(state, action: PayloadAction<{ movieId: string; reviews: Review[] }>) {
+      const { movieId, reviews } = action.payload;
+      if (!state.movies[movieId]) {
+        state.movies[movieId] =  {...defaultMovieState}
+      }
+      state.movies[movieId].firebaseReviews = reviews;
     },
-    setError(state, action: PayloadAction<string>) {
-      state.error = action.payload;
-      state.loading = false;
-      state.movie = null;
+    setError(state, action: PayloadAction<{ movieId: string; error: string }>) {
+      const { movieId, error } = action.payload;
+      if (!state.movies[movieId]) {
+        state.movies[movieId] =  {...defaultMovieState}
+      }
+      state.movies[movieId].error = error;
+      state.movies[movieId].loading = false;
+      state.movies[movieId].details = null;
     },
    
   },

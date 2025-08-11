@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDebounce } from '../../hook/useDebounce';
 import { Movie } from '../../types/types';
 import { useAppSelector } from '../../redux/hooks';
+import { selectUniqueCachedMovies } from '../../utils/uniqueCache';
 
 const SearchScreen = () => {
   const [query, setQuery] = useState('');
@@ -14,17 +15,8 @@ const SearchScreen = () => {
   const debouncedQuery = useDebounce(query, 500);
   const [loading, setLoading] = useState(false);
 
-  const allCachedMovies = useAppSelector(state => {
-    const allMovies = Object.values(state.movies.categories).flatMap(cat => cat.movies);
-    const uniqueMoviesMap = new Map();
 
-    allMovies.forEach(movie => {
-      uniqueMoviesMap.set(movie.id, movie);
-      });
-      return Array.from(uniqueMoviesMap.values());
-  });
-
-  
+  const allCachedMovies = useAppSelector(selectUniqueCachedMovies);
 
   useEffect(() => {
     if (debouncedQuery.trim().length < 3) {

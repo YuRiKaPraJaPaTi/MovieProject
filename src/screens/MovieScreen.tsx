@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
+import { StyleSheet, ScrollView, ActivityIndicator, Text} from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import TopSection from '../components/Movie/TopSection';
@@ -17,24 +17,30 @@ const MovieScreen = () => {
   const { movieId, title, image } = route.params;
 
   const dispatch = useAppDispatch();
-  const {movie, credits, tmdbReviews, firebaseReviews, loading, error} = useAppSelector(state => state.movieDetails)
+  const movieData = useAppSelector(state => state.movieDetails.movies[movieId]);
 
-
-  
     useEffect(() => {
-      dispatch(setLoading(true))
-      
+      if (movieData?.details) {
+        dispatch(setLoading({ movieId, loading: false }));
+        return;
+      }
+      dispatch(setLoading({ movieId, loading: true }));
 
       let unsubscribeFirestore: () => void;
     
       const fetchData = async () => {
         try {
+          // Fetch movie details only if not cached:
+          if (!movieData?.details) {
           const movieDetails = await fetchMovieDetails(movieId);
-          dispatch(setDetails(movieDetails))
-
-          const creditDetails = await fetchMovieCredits(movieId);
-          dispatch(setCredits(creditDetails ?? null))
+          dispatch(setDetails({ movieId, details: movieDetails }))  
+        }
           
+        if (!movieData?.credits) {
+          const creditDetails = await fetchMovieCredits(movieId);
+          dispatch(setCredits({ movieId, credits: creditDetails ?? null }))
+        }
+        if (!movieData?.tmdbReviews?.length) {
           const tmdbReviews = await fetchMovieReviews(movieId);
           const formattedTmdb = tmdbReviews.map((item: any) => ({
             id: item.id,
@@ -43,8 +49,9 @@ const MovieScreen = () => {
             rating: item.author_details.rating,
             source: 'tmdb' as const,
           }));
-          dispatch(setTmdbReviews(formattedTmdb));
-    
+          dispatch(setTmdbReviews({ movieId, reviews: formattedTmdb }));
+        }
+  
           // Real-time Firebase listener
           unsubscribeFirestore = listenToFirestoreReviews(movieId, (firebaseReviews) => {
             if (firebaseReviews) {
@@ -56,19 +63,19 @@ const MovieScreen = () => {
                 source: 'firebase' as const,
               }));
     
-            dispatch(setFirebaseReviews(formattedFirebase));
+            dispatch(setFirebaseReviews({ movieId, reviews: formattedFirebase }));
 
             } else {
-              dispatch(setFirebaseReviews([]));
+              dispatch(setFirebaseReviews({ movieId, reviews: [] }));
             }
-            dispatch(setLoading(false));
+            dispatch(setLoading({ movieId, loading: false }));
         
           });
           return unsubscribeFirestore;
 
         } catch (error) {
-          dispatch(setError('Failed to load movie details'));
-          dispatch(setLoading(false));
+          dispatch(setError({ movieId, error: 'Failed to load movie details' }));
+          dispatch(setLoading({ movieId, loading: false }));
         }
       };
     
@@ -79,19 +86,27 @@ const MovieScreen = () => {
       };
     }, [dispatch, movieId]);
 
-    const reviews = [...firebaseReviews, ...tmdbReviews];
+    const reviews = [...(movieData?.firebaseReviews ?? []), ...(movieData?.tmdbReviews ?? [])];
 
-    if (loading) {
+    if (!movieData || movieData.loading) {
       return <ActivityIndicator size="large" color="#002335" style={{ marginVertical: 50 }} />;
     }
+    if (movieData.error) {
+    return (
+      <ScrollView style={styles.container}>
+        <Text style={{ color: 'red', textAlign: 'center' }}>{movieData.error}</Text>
+      </ScrollView>
+    );
+  }
+
 
   
   return (
     <ScrollView style={styles.container}>
 
-       {credits && (
+       {movieData.credits && (
         <>
-          <TopSection movie={movie} credits={credits} />
+          <TopSection movie={movieData.details} credits={movieData.credits} />
           <ReviewSection reviews={reviews} movieId={movieId} title={title} image={image}/>
         </>
        )
