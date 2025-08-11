@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
@@ -6,8 +6,8 @@ import TopSection from '../components/Movie/TopSection';
 import ReviewSection from '../components/Movie/ReviewSection';
 import { listenToFirestoreReviews } from '../firebase/ReviewService';
 import { fetchMovieCredits, fetchMovieDetails, fetchMovieReviews } from '../TMDBapi/TMDB';
-import { Credits, Movie, Review } from '../types/types';
-
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setCredits, setError, setFirebaseReviews, setLoading, setTmdbReviews, setDetails } from '../redux/movieDetailsSlice';
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
 
@@ -16,22 +16,25 @@ const MovieScreen = () => {
   const route = useRoute<MovieScreenRouteProp>();
   const { movieId, title, image } = route.params;
 
-  const [movie, setMovie] = useState<Movie | null>(null);
-  const [credits, setCredits] = useState<Credits | undefined>(undefined);
-  const [tmdbReviews, setTmdbReviews] = useState<Review[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const {movie, credits, tmdbReviews, firebaseReviews, loading, error} = useAppSelector(state => state.movieDetails)
+
+
   
     useEffect(() => {
+      dispatch(setLoading(true))
+      
+
       let unsubscribeFirestore: () => void;
     
       const fetchData = async () => {
-        setLoading(true);
         try {
           const movieDetails = await fetchMovieDetails(movieId);
+          dispatch(setDetails(movieDetails))
+
           const creditDetails = await fetchMovieCredits(movieId);
-          setMovie(movieDetails);
-          setCredits(creditDetails);
+          dispatch(setCredits(creditDetails ?? null))
+          
           const tmdbReviews = await fetchMovieReviews(movieId);
           const formattedTmdb = tmdbReviews.map((item: any) => ({
             id: item.id,
@@ -40,7 +43,7 @@ const MovieScreen = () => {
             rating: item.author_details.rating,
             source: 'tmdb' as const,
           }));
-          setTmdbReviews(formattedTmdb);
+          dispatch(setTmdbReviews(formattedTmdb));
     
           // Real-time Firebase listener
           unsubscribeFirestore = listenToFirestoreReviews(movieId, (firebaseReviews) => {
@@ -53,16 +56,19 @@ const MovieScreen = () => {
                 source: 'firebase' as const,
               }));
     
-            setReviews([...formattedFirebase, ...formattedTmdb]);
+            dispatch(setFirebaseReviews(formattedFirebase));
+
             } else {
-              setReviews(formattedTmdb);
+              dispatch(setFirebaseReviews([]));
             }
-            setLoading(false);
+            dispatch(setLoading(false));
+        
           });
-    
+          return unsubscribeFirestore;
+
         } catch (error) {
-          console.error('Failed to load reviews:', error);
-          setLoading(false);
+          dispatch(setError('Failed to load movie details'));
+          dispatch(setLoading(false));
         }
       };
     
@@ -71,18 +77,25 @@ const MovieScreen = () => {
       return () => {
         if (unsubscribeFirestore) unsubscribeFirestore();
       };
-    }, [movieId]);
-  
-  if (loading) {
-    return <ActivityIndicator size="large" color="#002335" style={{ marginVertical: 50 }} />;
-  }
+    }, [dispatch, movieId]);
+
+    const reviews = [...firebaseReviews, ...tmdbReviews];
+
+    if (loading) {
+      return <ActivityIndicator size="large" color="#002335" style={{ marginVertical: 50 }} />;
+    }
+
   
   return (
     <ScrollView style={styles.container}>
-       
-       {movie && credits && <TopSection movie={movie} credits={credits} />}
 
-      <ReviewSection reviews={reviews} movieId={movieId} title={title} image={image}/>
+       {credits && (
+        <>
+          <TopSection movie={movie} credits={credits} />
+          <ReviewSection reviews={reviews} movieId={movieId} title={title} image={image}/>
+        </>
+       )
+       }
 
     </ScrollView>
   );
@@ -93,7 +106,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#002335',
   },
-
 
 });
 

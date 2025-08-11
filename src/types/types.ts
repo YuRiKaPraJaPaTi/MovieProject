@@ -2,13 +2,21 @@ export interface Movie {
   id: number;
   title: string;
   image: string;          
+  rating: number;         
+  releaseDate: string;          
+}
+
+export interface MovieDetails {
+  id: number;
+  title: string;
+  image: string;          
   backdropImage?: string; 
   rating: number;         
   releaseDate: string;    
   overview: string;
   tagline?: string;
   duration?: number;      
-  genres?: string;       
+  genres?: string;
 }
 
 export interface CastMember {
