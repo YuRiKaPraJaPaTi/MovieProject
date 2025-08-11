@@ -29,55 +29,54 @@ const defaultMovieState: MovieState = {
   error: null,
 };
 
+function initMovieState(state: MovieDetailsState, movieId: string) {
+  if (!state.movies[movieId]) {
+    state.movies[movieId] = { ...defaultMovieState };
+  }
+}
+
 const movieDetailsSlice = createSlice({
   name: 'movieDetails',
   initialState,
   reducers: {
+    
     setLoading(state, action: PayloadAction<{movieId: string, loading: boolean, }>) {
       const {movieId, loading} = action.payload
-      if (!state.movies[movieId]) {
-            state.movies[movieId] = {...defaultMovieState}
-      }
+      initMovieState(state, movieId);
       state.movies[movieId].loading = loading;
     },
+
     setDetails(state, action: PayloadAction<{ movieId: string; details: MovieDetails | null }> ) {
       const { movieId, details } = action.payload;
-      if (!state.movies[movieId]) {
-        state.movies[movieId] =  {...defaultMovieState}
-      }
+      initMovieState(state, movieId);
       state.movies[movieId].details = details;
     },
+
     setCredits(state, action: PayloadAction<{ movieId: string; credits: Credits | null }>) {
       const { movieId, credits } = action.payload;
-      if (!state.movies[movieId]) {
-        state.movies[movieId] =  {...defaultMovieState}
-      }
+      initMovieState(state, movieId);
       state.movies[movieId].credits = credits;
     },
+
     setTmdbReviews(state, action: PayloadAction<{ movieId: string; reviews: Review[] }>) {
       const { movieId, reviews } = action.payload;
-      if (!state.movies[movieId]) {
-        state.movies[movieId] =  {...defaultMovieState}
-      }
+      initMovieState(state, movieId);
       state.movies[movieId].tmdbReviews = reviews;
     },
+
     setFirebaseReviews(state, action: PayloadAction<{ movieId: string; reviews: Review[] }>) {
       const { movieId, reviews } = action.payload;
-      if (!state.movies[movieId]) {
-        state.movies[movieId] =  {...defaultMovieState}
-      }
+      initMovieState(state, movieId);
       state.movies[movieId].firebaseReviews = reviews;
     },
+    
     setError(state, action: PayloadAction<{ movieId: string; error: string }>) {
       const { movieId, error } = action.payload;
-      if (!state.movies[movieId]) {
-        state.movies[movieId] =  {...defaultMovieState}
-      }
+      initMovieState(state, movieId);
       state.movies[movieId].error = error;
       state.movies[movieId].loading = false;
       state.movies[movieId].details = null;
     },
-   
   },
 });
 
