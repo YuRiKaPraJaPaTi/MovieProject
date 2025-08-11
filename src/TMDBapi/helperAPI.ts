@@ -1,5 +1,7 @@
 import api from "./axiosInstance";
 
+const account_id = process.env.TMDB_ACCOUNT_ID
+
 // Helper function to handle API requests
  export const fetchFromAPI = async (endpoint: string, params = {}) => {
   let url = `movie/${endpoint}`
@@ -14,8 +16,12 @@ import api from "./axiosInstance";
     url = `search/movie`;
     // params = false
   } else if (endpoint == "favorite") {
-    url = `account/22105876//favorite/movies`
+    url = `account/${account_id}/favorite/movies`
     // https://api.themoviedb.org/3/account/{account_id}/favorite/movies
+
+ } else if (endpoint == "watchlist") {
+    url = `account/${account_id}/watchlist/movies`
+    // https://api.themoviedb.org/3/account/{account_id}/watchlist/movies
 
   }
   try {

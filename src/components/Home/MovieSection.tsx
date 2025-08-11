@@ -27,10 +27,12 @@ interface Props {
 const MovieSection = ({ title, endpoint }: Props) => {
  
 
-  let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' = 'Now Playing';
+  let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Favorite' | 'Watchlist' = 'Now Playing';
   if (title === 'Upcoming') sectionType = 'Upcoming';
   if (title === 'Top Rated') sectionType = 'Top Rated';
   if (title === 'Trending') sectionType = 'Trending';
+  if (title === 'Favorites') sectionType = 'Favorite';
+  if (title === 'Recently Watched') sectionType = 'Watchlist';
 
   const [data, setData] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);

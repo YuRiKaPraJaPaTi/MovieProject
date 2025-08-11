@@ -17,7 +17,7 @@ interface MovieCardProps {
       title: string;
       rating?: number;
       releaseDate?: string;
-      section?: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Search' | 'Favourite'
+      section?: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Search' | 'Favorite' | 'Watchlist'
 }
 
 type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
@@ -34,7 +34,7 @@ const MovieCard = ({ id, image, title, rating, releaseDate, section }: MovieCard
               style={styles.image} 
             />
 
-            {section !== 'Favourite' && (
+            {section !== 'Favorite' && (
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
             )}
             
