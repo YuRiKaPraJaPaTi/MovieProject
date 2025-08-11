@@ -7,17 +7,10 @@ import Pagination from './Pagination';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 import { Movie } from '../../types/types';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { setMovies, setPage } from '../../redux/movieSlice';
 
-
-
-
-// interface MovieItem {
-//   id: string;
-//   title: string;
-//   image: any;
-//   rating?: number;
-//   releaseDate?: string;
-// }
 
 interface Props {
   title: string;
@@ -25,7 +18,11 @@ interface Props {
 }
 
 const MovieSection = ({ title, endpoint }: Props) => {
- 
+
+  const dispatch = useAppDispatch()
+  const category = useAppSelector(
+    (state) => state.movies.categories[endpoint] || { movies: [], page: 1 }
+  );
 
   let sectionType: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Favorite' | 'Watchlist' = 'Now Playing';
   if (title === 'Upcoming') sectionType = 'Upcoming';
@@ -34,46 +31,29 @@ const MovieSection = ({ title, endpoint }: Props) => {
   if (title === 'Favorites') sectionType = 'Favorite';
   if (title === 'Recently Watched') sectionType = 'Watchlist';
 
-  const [data, setData] = useState<Movie[]>([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getMovies = async () => {
-      setLoading(true);
-      setError(null); // Reset error state on new request
-
-      try {
-        // Fetch the movies for the given category
-        const movies = await fetchMovies(endpoint, page);
-
-        // After getting the movies, update the state
-        setData(movies);
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-        setError("Failed to load movies");
-        setData([]);
-      }
-
-      setLoading(false);
+      const movies = await fetchMovies(endpoint, category.page)
+      dispatch(setMovies({endpoint, movies}))
     };
-
     getMovies();
-  }, [endpoint, page]);
+  }, [endpoint, category.page, dispatch]);
 
-
+  const onPageChange = (newPage: number) => {
+    dispatch(setPage({ endpoint, page: newPage }));
+  };
 
   return (
     <View style={styles.section}>
 
       <View style={styles.top}>
         <Text style={styles.sectionTitle}>{title}</Text>
-          {title !== 'Trending' && <Pagination page={page} setPage={setPage} />}
+          {title !== 'Trending' && <Pagination page={category.page} setPage={onPageChange} />}
       </View>
 
       <FlatList
-        data={data}
+        data={category.movies}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
         
@@ -111,7 +91,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: 600,
+    fontWeight: '600',
     color: '#FFFFFF',
   },
   unicode: {
@@ -121,5 +101,13 @@ const styles = StyleSheet.create({
   page: {
     color: '#FFFFFF',
     fontSize: 20,
-  }
+  },
+  loadingContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  errorContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
 });
