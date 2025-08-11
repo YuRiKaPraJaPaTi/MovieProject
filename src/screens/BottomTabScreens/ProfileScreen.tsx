@@ -1,4 +1,4 @@
-import { Alert, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useCallback } from 'react'
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -61,7 +61,13 @@ const ProfileScreen = () => {
         </View>      
       </View>
 
-    <MovieSection title='Favorites' endpoint='favorite'/>
+      <ScrollView>
+
+        <MovieSection title='Favorites' endpoint='favorite'/>
+
+        <MovieSection title='Recently Watched' endpoint='watchlist'/>
+
+      </ScrollView>
 
     </View>
   )

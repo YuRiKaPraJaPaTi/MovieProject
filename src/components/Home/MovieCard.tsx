@@ -17,7 +17,7 @@ interface MovieCardProps {
       title: string;
       rating?: number;
       releaseDate?: string;
-      section?: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Search' | 'Favorite'
+      section?: 'Now Playing' | 'Upcoming' | 'Top Rated' | 'Popular' | 'Trending' | 'Search' | 'Favorite' | 'Watchlist'
 }
 
 type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
