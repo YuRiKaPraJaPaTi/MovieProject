@@ -11,7 +11,7 @@ const account_id = process.env.TMDB_ACCOUNT_ID
     url = `${endpoint}/movie/day`
       console.log("trending url", url)
   
-    params = false; 
+    params = {}; 
   } else if (endpoint === "search") {
     url = `search/movie`;
     // params = false

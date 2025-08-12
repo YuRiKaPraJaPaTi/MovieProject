@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
       pagination: {
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 10,
+            justifyContent:'center',
       },
       unicode: {
             color: '#FFCA45',
             fontSize: 16,
-            paddingHorizontal: 4,
+            paddingHorizontal: 12,
       },
       input: {
             color: 'white',   

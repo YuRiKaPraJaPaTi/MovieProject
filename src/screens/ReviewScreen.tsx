@@ -1,13 +1,11 @@
-import { Alert, Image, StyleSheet, Text, TextInput,TouchableOpacity,View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Image, StyleSheet, Text, TouchableOpacity,View } from 'react-native'
+import React from 'react'
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { HomeTabScreenProps, RootStackParamList } from '../navigation/types';
-import MyButton from '../components/MyButton';
-import RatingRow from '../components/RatingRow';
-import { addReview } from '../firebase/ReviewService';
 import FastImage from 'react-native-fast-image';
-import { addToFavourite } from '../TMDBapi/addFavourite';
 import { ToastAndroid } from 'react-native';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { toggleFavorite } from '../redux/slices/favoriteSlice';
 
 type ReviewScreenRouteProp = RouteProp<RootStackParamList, 'Review'>;
 
@@ -16,47 +14,53 @@ const ReviewScreen = ({ navigation }: HomeTabScreenProps<'Wishlist'>) => {
   
 
   const { movieId, title, image } = route.params;
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState(0);
-  const [canEditRating, setCanEditRating] = useState(true);
+  // const [comment, setComment] = useState('');
+  // const [rating, setRating] = useState(0);
+  // const [canEditRating, setCanEditRating] = useState(true);
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  // const [isFavorite, setIsFavorite] = useState(false);
+  const dispatch = useAppDispatch();
+
+  // Check if this movie is in favorites from Redux store
+  const favoriteIds = useAppSelector(state => 
+    state.favorite.favoriteIds
+  );
+  const isFavorite = favoriteIds.includes(movieId.toString());
+  console.log(isFavorite)
 
 
-  const handleToggleFavorite = async () => {
-    const newStatus = !isFavorite;
-    try {
-      const result = await addToFavourite(newStatus, movieId);
-      if (result.success) {
-        setIsFavorite(newStatus);
-        ToastAndroid.show(
-          newStatus ? 'Added to favourites!' : 'Removed from favourites!', 
-          ToastAndroid.SHORT);
-          setTimeout(() => {
-            navigation.navigate('Tabs', { screen: 'Wishlist' });
-          }, 1000); 
-      } else {
-        Alert.alert('Failed, Try again');
-      }
-    } catch (err) {
-      Alert.alert('Error', 'Could not update favourite status.');
-    }
-  };
-
-  const handleSubmitReview = async () => {
-    if (!comment && rating === 0) return;
-
-    try {
-      await addReview(movieId, comment, rating)
+  const handleToggleFavorite = () => {
+    dispatch(toggleFavorite({ movieId: movieId.toString(), isFavorite: !isFavorite }))
     
-      setComment('');
-      setCanEditRating(false);
-      navigation.goBack();
-      
-    } catch (error) {
-      console.error('Error submitting review:', error);
-    }
+      .unwrap()
+      .then(() => {
+        ToastAndroid.show(
+          !isFavorite ? 'Added to favourites!' : 'Removed from favourites!',
+          ToastAndroid.SHORT
+        );
+        setTimeout(() => {
+          navigation.navigate('Tabs', { screen: 'Wishlist' });
+        }, 1000);
+      })
+      .catch(() => {
+        Alert.alert('Failed, Try again');
+      });
   };
+
+  // const handleSubmitReview = async () => {
+  //   if (!comment && rating === 0) return;
+
+  //   try {
+  //     await addReview(movieId, comment, rating)
+    
+  //     setComment('');
+  //     setCanEditRating(false);
+  //     navigation.goBack();
+      
+  //   } catch (error) {
+  //     console.error('Error submitting review:', error);
+  //   }
+  // };
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
@@ -79,7 +83,7 @@ const ReviewScreen = ({ navigation }: HomeTabScreenProps<'Wishlist'>) => {
       </View>
       
       <View style={styles.likerow}>
-        <RatingRow rating={rating} setRating={setRating} />
+        {/* <RatingRow rating={rating} setRating={setRating} /> */}
       
             <View style={{flexDirection: 'column'}}>
               <Text style={styles.favourite}>Add to Favourite</Text>
@@ -93,17 +97,17 @@ const ReviewScreen = ({ navigation }: HomeTabScreenProps<'Wishlist'>) => {
       </View>
 
       
-      <TextInput
+      {/* <TextInput
         placeholder="Write your review..."
         style={styles.input}
         value={comment}
         multiline
         onChangeText={setComment}
-      />
+      /> */}
 
-      <View style={{flexDirection: 'row',justifyContent: 'flex-end'}}>
+      {/* <View style={{flexDirection: 'row',justifyContent: 'flex-end'}}>
         <MyButton label='Publish' width={100} onPress={handleSubmitReview} />
-      </View>
+      </View> */}
     </View>
   )
 }

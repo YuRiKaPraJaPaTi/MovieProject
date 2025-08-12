@@ -1,11 +1,13 @@
 import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import MovieCard from '../../components/Home/MovieCard';
 import { fetchFromAPI } from '../../TMDBapi/helperAPI';
 import MovieSection from '../../components/Home/MovieSection';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDebounce } from '../../hook/useDebounce';
 import { Movie } from '../../types/types';
+import { useAppSelector } from '../../redux/hooks';
+import { selectUniqueCachedMovies } from '../../utils/uniqueCache';
 
 const SearchScreen = () => {
   const [query, setQuery] = useState('');
@@ -13,12 +15,27 @@ const SearchScreen = () => {
   const debouncedQuery = useDebounce(query, 500);
   const [loading, setLoading] = useState(false);
 
+
+  const allCachedMovies = useAppSelector(selectUniqueCachedMovies);
+
   useEffect(() => {
-    if (debouncedQuery.trim() === '') {
+    if (debouncedQuery.trim().length < 3) {
       setResults([]);
       setLoading(false);
       return;
     }
+
+    // Search cached movies first
+    const filteredCachedMovies = allCachedMovies.filter(movie =>
+      movie.title.toLowerCase().includes(debouncedQuery.toLowerCase())
+    );
+
+    if (filteredCachedMovies.length > 0) {
+    // If we found matches in cache, use them immediately
+    setResults(filteredCachedMovies);
+    setLoading(false);
+  } else {
+    let isActive = true;
 
     const fetchResults = async () => {
       setLoading(true);
@@ -29,6 +46,11 @@ const SearchScreen = () => {
     };
 
     fetchResults();
+
+    return () => {
+      isActive = false; 
+    };
+  }
   }, [debouncedQuery]);
 
   const clearSearch = () => {
@@ -55,9 +77,24 @@ const SearchScreen = () => {
         )}
         
       </View>
+
+      <View style={styles.normalContent}>
+
+          <MovieSection title="Trending" endpoint="trending" />
+
+        <View style={styles.browse}>
+          <Image source={require('../../assets/browseCircle.png')} />
+          <Text style={styles.btext}>BROWSE ALL MOVIES</Text>
+          <Image source={require('../../assets/Rarrow.png')} />
+        </View>
+        
+        <MovieSection title='Upcoming' endpoint='upcoming'/>
+
+      </View>
+
       
-      {debouncedQuery.trim().length > 0 ? (
-        <>
+      {debouncedQuery.trim().length > 0  && (
+        <View style={styles.resultsOverlay}>
           {loading ? (
             <Text style={styles.statusText}>Loading...</Text>
           ) : results.length === 0 ? (
@@ -69,7 +106,8 @@ const SearchScreen = () => {
             renderItem={({ item }) => (
               <MovieCard
                 id={item.id.toString()}
-                image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                // image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                image={item.image}
                 title={item.title}
                 rating={item.vote_average}
                 releaseDate={item.release_date}
@@ -82,22 +120,8 @@ const SearchScreen = () => {
             ListHeaderComponent={<Text style={styles.resultsTitle}>Results</Text>}
           />
           )}
-        </>
-      ) : (
-
-      <ScrollView>
-
-        <MovieSection title="Trending" endpoint="trending" />
-
-        <View style={styles.browse}>
-          <Image source={require('../../assets/browseCircle.png')} />
-          <Text style={styles.btext}>BROWSE ALL MOVIES</Text>
-          <Image source={require('../../assets/Rarrow.png')} />
         </View>
-        
-        <MovieSection title='Upcoming' endpoint='upcoming'/>
-      </ScrollView>
-        )}
+      ) }
     </View>
 
     
@@ -132,6 +156,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     top: 10,
+  },
+    normalContent: {
+    flex: 1,
+  },
+  resultsOverlay: {
+    position: 'absolute',
+    top: 80,  
+    left: 20,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#002335EE', 
+    zIndex: 4000,
+    paddingHorizontal: 0,
   },
   resultsTitle: {
     color: 'white',
