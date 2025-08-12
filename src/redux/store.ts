@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import movieReducer from '../redux/movieSlice'
-import movieDetailsReducer from './movieDetailsSlice'
+import movieReducer from './slices/movieSlice'
+import movieDetailsReducer from './slices/movieDetailsSlice'
+import favoriteReducer from './slices/favoriteSlice'
 
 export const store = configureStore({
   reducer: {
       movies: movieReducer,
       movieDetails: movieDetailsReducer,
+      favorite: favoriteReducer,
   },
 })
 

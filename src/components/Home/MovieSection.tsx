@@ -9,7 +9,7 @@ import { RootStackParamList } from '../../navigation/types';
 import { Movie } from '../../types/types';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { setMovies, setPage } from '../../redux/movieSlice';
+import { setMovies, setPage } from '../../redux/slices/movieSlice';
 
 
 interface Props {

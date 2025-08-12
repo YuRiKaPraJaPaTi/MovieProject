@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { 
   setCredits, setError, setFirebaseReviews, setLoading, setTmdbReviews, setDetails 
-} from '../redux/movieDetailsSlice';
+} from '../redux/slices/movieDetailsSlice';
 import { fetchMovieCredits, fetchMovieDetails, fetchMovieReviews } from '../TMDBapi/TMDB';
 import { listenToFirestoreReviews } from '../firebase/ReviewService';
 

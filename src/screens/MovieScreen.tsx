@@ -7,7 +7,7 @@ import ReviewSection from '../components/Movie/ReviewSection';
 import { listenToFirestoreReviews } from '../firebase/ReviewService';
 import { fetchMovieCredits, fetchMovieDetails, fetchMovieReviews } from '../TMDBapi/TMDB';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setCredits, setError, setFirebaseReviews, setLoading, setTmdbReviews, setDetails } from '../redux/movieDetailsSlice';
+import { setCredits, setError, setFirebaseReviews, setLoading, setTmdbReviews, setDetails } from '../redux/slices/movieDetailsSlice';
 import { useMovieDetails } from '../hook/useMovieDetails';
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;

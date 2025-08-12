@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Credits, MovieDetails, Review } from '../types/types';
+import { Credits, MovieDetails, Review } from '../../types/types';
 
 interface MovieState {
   details: MovieDetails | null;
