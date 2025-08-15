@@ -37,26 +37,26 @@ export function showInfoToast(text1: string, text2?: string) {
 }
 
 
-import React from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+// import React from 'react';
+// import { View, Button, StyleSheet } from 'react-native';
 
 
 
-export function Foo() {
-  return (
-    <View style={styles.container}>
-      <Button title="Show Success Toast" onPress={() => showSuccessToast('Success!', 'Operation completed')} />
-      <View style={styles.spacer} />
-      <Button title="Show Error Toast" onPress={() => showErrorToast('Error!', 'Something went wrong')} />
-      <View style={styles.spacer} />
-      <Button title="Show Info Toast" onPress={() => showInfoToast('Info', 'Just so you know')} />
-      <Toast />
-    </View>
-  );
-}
+// export function Foo() {
+//   return (
+//     <View style={styles.container}>
+//       <Button title="Show Success Toast" onPress={() => showSuccessToast('Success!', 'Operation completed')} />
+//       <View style={styles.spacer} />
+//       <Button title="Show Error Toast" onPress={() => showErrorToast('Error!', 'Something went wrong')} />
+//       <View style={styles.spacer} />
+//       <Button title="Show Info Toast" onPress={() => showInfoToast('Info', 'Just so you know')} />
+//       <Toast />
+//     </View>
+//   );
+// }
 
-const styles = StyleSheet.create({
-  container: { flex: 1,  padding: 20 , zIndex: 0},
-  spacer: { height: 12 },
-});
+// const styles = StyleSheet.create({
+//   container: { flex: 1,  padding: 20 , zIndex: 0},
+//   spacer: { height: 12 },
+// });
 
