@@ -21,12 +21,12 @@ const RatingRow = ({ rating, setRating }: RatingProps) => {
                   {/* Stars */}
                   <View style={styles.starsContainer}>
                         
-                  {[1, 2, 3, 4, 5].map((i) => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                   <TouchableOpacity key={i} onPress={() => handleStarPress(i)}>
                         <Icon
                         name={i <= rating ? 'star' : 'star'}
                         size={36}
-                        color={i <= rating ? '#FFD700' : '#FFFFFF50'}
+                        color={i <= rating ? '#FFCA45' : '#FFFFFF50'}
                         />
                   </TouchableOpacity>
                   ))}
