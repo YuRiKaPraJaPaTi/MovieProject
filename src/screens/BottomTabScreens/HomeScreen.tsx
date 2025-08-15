@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import React from 'react'
 import HomeHeader from '../../components/Home/HomeHeader'
 import MovieSection from '../../components/Home/MovieSection';

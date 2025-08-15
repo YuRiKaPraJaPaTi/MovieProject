@@ -1,11 +1,10 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useMemo, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import MovieCard from '../../components/Home/MovieCard';
 import { fetchFromAPI } from '../../TMDBapi/helperAPI';
 import MovieSection from '../../components/Home/MovieSection';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDebounce } from '../../hook/useDebounce';
-import { Movie } from '../../types/types';
 import { useAppSelector } from '../../redux/hooks';
 import { selectUniqueCachedMovies } from '../../utils/uniqueCache';
 
