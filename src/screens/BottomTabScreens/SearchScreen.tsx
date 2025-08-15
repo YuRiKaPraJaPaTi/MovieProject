@@ -102,17 +102,26 @@ const SearchScreen = () => {
             <FlatList
             data={results}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
+            renderItem={({ item }) => {
+              const imageUrl =
+                item.image && item.image.startsWith('http') // if redux cached item has a valid image
+                  ? item.image
+                  : item.poster_path // fallback to API poster_path
+                  ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                  : null;
+              return(
               <MovieCard
                 id={item.id.toString()}
                 // image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                image={item.image}
+                // image={item.image}
+                image={imageUrl}
                 title={item.title}
                 rating={item.vote_average}
                 releaseDate={item.release_date}
                 section="Search" 
               />
-            )}
+              )
+            }}
             numColumns={3} 
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.resultsContainer} 
