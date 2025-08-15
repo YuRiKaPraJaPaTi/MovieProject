@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import LoginSignupContainer, { FormValues } from '../../components/LoginSignupContainer';
 import auth from '@react-native-firebase/auth';
 import { useAuth } from '../../context/AuthContext';
+import { showErrorToast, showSuccessToast } from '../../utils/toast/toastHelper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'> 
 
@@ -35,7 +36,7 @@ const LoginScreen = ({navigation}:Props) => {
             auth()
                   .signInWithEmailAndPassword(email, password)
                   .then(() => {
-                  // navigation.navigate('Tabs')
+                  showSuccessToast('Welcome', 'Login successful')
                   })
                   .catch((error) => {
                   // Handle Firebase authentication errors
@@ -55,7 +56,7 @@ const LoginScreen = ({navigation}:Props) => {
                         errorMap.email = 'This email is already associated with another account.';
                         break;
                   default:
-                        Alert.alert(error.message || 'Login failed');
+                        showErrorToast(error.message || 'Login failed');
                         break;
                   }
 
