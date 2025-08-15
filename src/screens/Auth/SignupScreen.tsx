@@ -5,6 +5,7 @@ import {RootStackParamList } from '../../navigation/types';
 import { Image } from 'react-native/';
 import LoginSignupContainer, { FormValues } from '../../components/LoginSignupContainer';
 import { createUserWithEmailAndPassword, getAuth } from '@react-native-firebase/auth';
+import { showErrorToast, showSuccessToast } from '../../utils/toast/toastHelper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Signup'>;
 
@@ -30,7 +31,7 @@ const SignupScreen = ({navigation}: Props) => {
 
     createUserWithEmailAndPassword(getAuth(), email, password)
     .then(() => {
-      Alert.alert('Account created successfully!');
+      showSuccessToast('Account created successfully!');
     })
     .catch((error) => {
       const errorMap: typeof fieldErrors = {};
@@ -42,7 +43,7 @@ const SignupScreen = ({navigation}: Props) => {
       } else if (error.code === 'auth/weak-password') {
         errorMap.password = 'Password must be at least 6 characters.';
       } else {
-        Alert.alert(error.message || 'Signup failed');
+        showErrorToast(error.message || 'Signup failed');
       }
 
       setFieldErrors(errorMap);

@@ -1,11 +1,12 @@
 import { Alert, Image, StyleSheet, Text, TouchableOpacity,View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { HomeTabScreenProps, RootStackParamList } from '../navigation/types';
 import FastImage from 'react-native-fast-image';
 import { ToastAndroid } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { toggleFavorite } from '../redux/slices/favoriteSlice';
+import { fetchFavorites, toggleFavorite } from '../redux/slices/favoriteSlice';
+import { showErrorToast, showInfoToast, showSuccessToast } from '../utils/toast/toastHelper';
 
 type ReviewScreenRouteProp = RouteProp<RootStackParamList, 'Review'>;
 
@@ -21,6 +22,10 @@ const ReviewScreen = ({ navigation }: HomeTabScreenProps<'Wishlist'>) => {
   // const [isFavorite, setIsFavorite] = useState(false);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    dispatch(fetchFavorites());
+  }, [dispatch]);
+
   // Check if this movie is in favorites from Redux store
   const favoriteIds = useAppSelector(state => 
     state.favorite.favoriteIds
@@ -34,16 +39,14 @@ const ReviewScreen = ({ navigation }: HomeTabScreenProps<'Wishlist'>) => {
     
       .unwrap()
       .then(() => {
-        ToastAndroid.show(
-          !isFavorite ? 'Added to favourites!' : 'Removed from favourites!',
-          ToastAndroid.SHORT
-        );
+          !isFavorite ? showSuccessToast('Added to favourites!') : showInfoToast('Removed from favourites!')
         setTimeout(() => {
           navigation.navigate('Tabs', { screen: 'Wishlist' });
         }, 1000);
       })
       .catch(() => {
-        Alert.alert('Failed, Try again');
+        dispatch(toggleFavorite({ movieId: movieId.toString(), isFavorite: isFavorite }))
+        showErrorToast('Failed', 'Please try again');
       });
   };
 

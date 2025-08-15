@@ -4,6 +4,7 @@ import { formatRuntime } from '../../utils/timeUtils';
 import ThreeButtonsRow from './ThreeButtonRow';
 import { Credits } from '../../types/types';
 import { addToWatchlist } from '../../TMDBapi/addToWactclist';
+import { showErrorToast, showInfoToast, showSuccessToast } from '../../utils/toast/toastHelper';
 
 type  Props = {
     movie: any;
@@ -22,14 +23,12 @@ const TopSection = ({movie, credits}:Props) => {
         const result = await addToWatchlist(newStatus, movie.id);
         if (result.success) {
           setWatch(newStatus);
-          ToastAndroid.show(
-            newStatus ? 'Added to wATCHLIST!' : 'Removed from watchlist!', 
-            ToastAndroid.SHORT);
+            newStatus ? showSuccessToast('Added to watchlist!'): showInfoToast('Removed from watchlist!')
         } else {
-          Alert.alert('Failed, Try again');
+          showErrorToast('Failed', 'Please Try again');
         }
       } catch (err) {
-        Alert.alert('Error', 'Could not update watchlist status.');
+        showErrorToast('Error', 'Could not update watchlist status.');
       }
     };
 

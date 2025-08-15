@@ -1,26 +1,21 @@
-import { Alert, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useCallback } from 'react'
-import { getAuth, signOut } from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useAuth } from '../../context/AuthContext';
 import MovieSection from '../../components/Home/MovieSection';
+import { showInfoToast } from '../../utils/toast/toastHelper';
+import { confirmSignOut } from '../../utils/authHelper/signoutHelper';
 
 const ProfileScreen = () => {
   const {user} = useAuth()
   const email = user?.email ?? 'No Email';
   const initial = email.charAt(0).toUpperCase();
 
-  const handleSignOut = useCallback(async () => {
-    const auth = getAuth();
-      try {
-        await signOut(auth);
-          Alert.alert("Signed out", "You have been signed out successfully.");
-                  
-          } catch (error) {
-            Alert.alert("Error", "Something went wrong while signing out.");
-            console.error("Sign-out error:", error);
-          }
-      }, []);
+
+  const handleSignOut = useCallback(() => {
+    confirmSignOut(showInfoToast);
+  }, []);
+
 
   return (
         
