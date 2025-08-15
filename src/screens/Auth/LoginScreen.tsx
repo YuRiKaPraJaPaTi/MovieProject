@@ -1,4 +1,4 @@
-import { Alert, Image, ImageBackground, StyleSheet } from 'react-native'
+import { Image, ImageBackground, StyleSheet } from 'react-native'
 import React, { useCallback, useState } from 'react'
 import { RootStackParamList } from '../../navigation/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';

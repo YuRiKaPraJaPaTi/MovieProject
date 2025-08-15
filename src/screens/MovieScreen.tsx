@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, ScrollView, ActivityIndicator, Text} from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import TopSection from '../components/Movie/TopSection';
 import ReviewSection from '../components/Movie/ReviewSection';
-import { listenToFirestoreReviews } from '../firebase/ReviewService';
-import { fetchMovieCredits, fetchMovieDetails, fetchMovieReviews } from '../TMDBapi/TMDB';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setCredits, setError, setFirebaseReviews, setLoading, setTmdbReviews, setDetails } from '../redux/slices/movieDetailsSlice';
 import { useMovieDetails } from '../hook/useMovieDetails';
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;

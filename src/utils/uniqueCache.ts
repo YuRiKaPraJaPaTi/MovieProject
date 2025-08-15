@@ -1,6 +1,5 @@
-// src/redux/selectors/moviesSelectors.ts
 import { createSelector } from '@reduxjs/toolkit';
-import { RootState } from '../redux/store';// adjust path to your RootState type
+import { RootState } from '../redux/store';
 
 const selectCategories = (state: RootState) => state.movies.categories;
 
