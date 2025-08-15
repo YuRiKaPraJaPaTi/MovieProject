@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import MovieCard from '../../components/Home/MovieCard';
 import { RootState } from '../../redux/store';
-import { fetchMovies } from '../../TMDBapi/TMDB';
+import { fetchMovieDetails, fetchMovies } from '../../TMDBapi/TMDB';
 
 const WishlistScreen = () => {
   const favoriteIds = useSelector((state: RootState) => state.favorite.favoriteIds);
@@ -13,54 +13,49 @@ const WishlistScreen = () => {
   const [favoriteMovies, setFavoriteMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Helper to fetch movie details from IDs either from Redux or API fallback
-  const fetchMoviesByIds = async (ids: string[]) => {
-    
-    const cachedMovies = ids
-      .map(id => movieDetailsState[id]?.details)
-      .filter(Boolean); 
-
-    if (cachedMovies.length === ids.length) {
-      
-      return cachedMovies;
-    } else {
-      
-      const missingIds = ids.filter(id => !movieDetailsState[id]?.details);
-
-      
-      const fetchedMovies = await Promise.all(
-        missingIds.map(id => fetchMovies(id))
-      );
-
-      
-      return [...cachedMovies, ...fetchedMovies.flat()];
-    }
-  };
-
-  const fetchFavourite = async () => {
-
-    setLoading(true);
-    try {
-      if (favoriteIds.length > 0) {
-        
-        const movies = await fetchMoviesByIds(favoriteIds);
-        setFavoriteMovies(movies);
-      } else {
-        
-        const favouriteMovies = await fetchMovies('favorite');
-        setFavoriteMovies(favouriteMovies);
-      }
-    } catch (error) {
-      console.log('Error fetching favorite movies:', error);
-      setFavoriteMovies([]);
-    }
-    setLoading(false);
-  };
-
-  useFocusEffect(
+   useFocusEffect(
     useCallback(() => {
+      let isActive = true; 
+
+      const fetchFavourite = async () => {
+        setLoading(true);
+
+        try {
+          // Get cached movies from Redux slice
+          const cachedMovies = favoriteIds
+            .map(id => movieDetailsState[id]?.details)
+            .filter(Boolean);
+
+          // Identify missing IDs
+          const missingIds = favoriteIds.filter(id => !movieDetailsState[id]?.details);
+
+          // Fetch missing movie details
+          let fetchedMovies: any[] = [];
+          if (missingIds.length > 0) {
+            fetchedMovies = await Promise.all(
+              missingIds.map(id => fetchMovieDetails(id))
+            );
+          }
+
+          // Update state if component is still focused
+          if (isActive) {
+            setFavoriteMovies([...cachedMovies, ...fetchedMovies]);
+          }
+
+        } catch (error) {
+          console.log('Error fetching favorite movies:', error);
+          if (isActive) setFavoriteMovies([]);
+        } finally {
+          if (isActive) setLoading(false);
+        }
+      };
+
       fetchFavourite();
-    }, [favoriteIds]) // refetch when favoriteIds change
+
+      return () => {
+        isActive = false; // prevent state updates on unmounted screen
+      };
+    }, [favoriteIds, movieDetailsState])
   );
 
   return (

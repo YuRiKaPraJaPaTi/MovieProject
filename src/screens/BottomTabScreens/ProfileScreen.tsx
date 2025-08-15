@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import MovieSection from '../../components/Home/MovieSection';
 import { showInfoToast } from '../../utils/toast/toastHelper';
 import { confirmSignOut } from '../../utils/authHelper/signoutHelper';
+import WatchlistSection from '../../components/Profile/WatchliseSection';
 
 const ProfileScreen = () => {
   const {user} = useAuth()
@@ -60,7 +61,7 @@ const ProfileScreen = () => {
 
         <MovieSection title='Favorites' endpoint='favorite'/>
 
-        <MovieSection title='Recently Watched' endpoint='watchlist'/>
+        <WatchlistSection />
 
       </ScrollView>
 
