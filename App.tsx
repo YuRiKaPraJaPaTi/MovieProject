@@ -13,14 +13,25 @@ import { AuthProvider } from './src/context/AuthContext';
 import { store } from './src/redux/store';
 import { Provider } from 'react-redux';
 import Toast from 'react-native-toast-message';
+import { useEffect } from 'react';
+import { fetchWatchlist } from './src/redux/slices/watchlistSlice';
+import { useAppDispatch } from './src/redux/hooks';
+import { fetchFavorites } from './src/redux/slices/favoriteSlice';
 
-function App() {
+function MainApp() {
+
+  const dispatch = useAppDispatch()
+
+    useEffect(() => {
+      dispatch(fetchFavorites());
+      dispatch(fetchWatchlist());
+    }, [dispatch]);
 
 
   return (
   
     <>
-    <Provider store={store}>
+    
       <StatusBar backgroundColor="#002335" barStyle="light-content" />
 
       <AuthProvider>
@@ -30,10 +41,17 @@ function App() {
       
         </NavigationContainer>
       </AuthProvider>
-    </Provider>
-    {/* <Foo /> */}
-    <Toast />
+    
+      <Toast />
     </>
+  );
+}
+
+function App() {
+  return (
+    <Provider store={store}>
+      <MainApp />
+    </Provider>
   );
 }
 
