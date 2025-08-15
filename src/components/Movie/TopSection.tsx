@@ -20,9 +20,7 @@ const TopSection = ({movie, credits}:Props) => {
   // const [watch, setWatch] = useState(false)
   const dispatch = useAppDispatch();
   
-    useEffect(() => {
-      dispatch(fetchWatchlist());
-    }, [dispatch]);
+  
 
   // Check if this movie is in favorites from Redux store
     const watchlistIds = useAppSelector(state => 
