@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, FlatList, ToastAndroid, Alert, TouchableOpacity } from 'react-native';
 import { formatRuntime } from '../../utils/timeUtils';
 import ThreeButtonsRow from './ThreeButtonRow';
 import { Credits } from '../../types/types';
 import { addToWatchlist } from '../../TMDBapi/addToWactclist';
 import { showErrorToast, showInfoToast, showSuccessToast } from '../../utils/toast/toastHelper';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { fetchWatchlist, toggleWatchlist } from '../../redux/slices/watchlistSlice';
 
 type  Props = {
     movie: any;
@@ -15,21 +17,30 @@ const TopSection = ({movie, credits}:Props) => {
   const safeRating = Math.min(Math.max(movie?.rating, 0), 10);
   const percentage = safeRating * 10; 
 
-  const [watch, setWatch] = useState(false)
+  // const [watch, setWatch] = useState(false)
+  const dispatch = useAppDispatch();
+  
+    useEffect(() => {
+      dispatch(fetchWatchlist());
+    }, [dispatch]);
+
+  // Check if this movie is in favorites from Redux store
+    const watchlistIds = useAppSelector(state => 
+      state.watchlist.watchlistIds
+    );
+    const isInWatchlist = watchlistIds.includes(movie.id.toString())
+    
 
     const handleToggleWatchlist = async () => {
-      const newStatus = !watch;
-      try {
-        const result = await addToWatchlist(newStatus, movie.id);
-        if (result.success) {
-          setWatch(newStatus);
-            newStatus ? showSuccessToast('Added to watchlist!'): showInfoToast('Removed from watchlist!')
-        } else {
-          showErrorToast('Failed', 'Please Try again');
-        }
-      } catch (err) {
-        showErrorToast('Error', 'Could not update watchlist status.');
-      }
+      dispatch(toggleWatchlist({ movieId: movie.id.toString(), isInWatchlist: !isInWatchlist }))
+
+      .unwrap()
+      .then(()=>{
+        !isInWatchlist ? showSuccessToast('Added to watchlist!'): showInfoToast('Removed from watchlist!')
+      })
+      .catch(()=>{
+        showErrorToast('Failed', 'Please Try again');
+      })
     };
 
   return (
@@ -72,7 +83,7 @@ const TopSection = ({movie, credits}:Props) => {
           <Text style={styles.bottomText}><Image source={require('../../assets/Duration.png')}/>  {formatRuntime(movie?.duration)}</Text>
           <Text style={styles.bottomText}><Image source={require('../../assets/Date.png')}/>  {movie?.releaseDate}</Text>
           <TouchableOpacity onPress={handleToggleWatchlist}>
-            <Text style={styles.bottomText}><Image source={require('../../assets/Eye.png')}/> {watch ? ' Watched' : ' Not Watched'}</Text>
+            <Text style={[styles.bottomText, { color: isInWatchlist ? '#FFCA45' : '#FFFFFF75' }]}><Image source={require('../../assets/Eye.png')}/> {isInWatchlist ? ' Watched' : ' Not Watched'}</Text>
           </TouchableOpacity>
           
       </View>
