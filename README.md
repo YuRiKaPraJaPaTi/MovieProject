@@ -4,10 +4,10 @@ A feature-rich movie application built with **React Native**. The app allows use
 
 ---
 
-![MovieApp Welcome](assets/overview/getStarted.jpg) 
-![MovieApp Home](assets/overview/homeTab.jpg) 
+![MovieApp Welcome](src/assets/overview/getStarted.jpg) 
+![MovieApp Home](src/assets/overview/homeTab.jpg) 
 
-To see further pictures about in detail,
+To see further pictures about in
 📄 [Download the Project Overview PDF](assets/overview/MovieApp.pdf)
 
 ## Features
